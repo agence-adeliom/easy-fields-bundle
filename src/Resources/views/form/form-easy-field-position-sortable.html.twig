@@ -1,0 +1,277 @@
+{% block form_easy_field_position_sortable_widget %}
+    {% set parent = entity.instance.getSortableData(field.customOptions.get('parentProperty')) ? entity.instance.getSortableData(field.customOptions.get('parentProperty')).getSortableData(entity.primaryKeyName) : 0 %}
+    {% if parent %}
+        <button class="btn btn-sm btn-secondary sortable-position"><i class="fa fa-arrows-alt-v"></i></button>
+    {% endif %}
+        <input type="hidden" value="{{ entity.primaryKeyValue ~ ":" ~ field.customOptions.get('parentProperty') }}" class="sortable-position-datas" />
+        <input type="hidden" value="{{ field.customOptions.get('actionUrl') }}" class="sortable-position-url" />
+        <input type="hidden" value="{{ parent }}" class="sortable-parent-id" />
+        <input type="hidden" value="{{ entity.primaryKeyValue }}" class="sortable-id" />
+
+    {% if sortablePositionAssets is not defined %}
+        {% set sortablePositionAssets = true %}
+        <style type="text/css">
+            .table.datagrid {
+                background-color: var(--body-bg);
+                position: relative;
+                user-select: none;
+            }
+            .table.datagrid.loading:after {
+                content: url('/bundles/easyfields/images/loader.svg');
+                position: absolute;
+                transform: translate(-50%, -50%);
+                top: 50%;
+                left: 50%;
+                width: 100px;
+                opacity: 1;
+                z-index: 2;
+            }
+            .table.datagrid.loading:before {
+                content:'';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                color: var(--table-thead-color);
+                background-color: var(--gray-200);
+                opacity: 0.2;
+                z-index: 1;
+            }
+            .table.datagrid .draggable-table__drag {
+                position: absolute;
+                z-index: 10;
+                cursor: grabbing;
+                opacity: 1;
+            }
+            .table.datagrid tbody tr {
+                cursor: grabbing;
+            }
+            .table.datagrid tbody tr.is-dragging {
+                background: var(--gray-200);
+            }
+            .table.datagrid tbody tr.draggable-hidden-row {
+                display: none;
+            }
+
+        </style>
+        <script>
+            (function() {
+                "use strict";
+
+                if (!window.sortable_positon){
+                    window.sortable_positon = true;
+
+                    const table = document.querySelector('.table.datagrid');
+                    const tbody = table.querySelector('tbody');
+                    let newPosition = null;
+
+                    var currRow = null,
+                        dragElem = null,
+                        mouseDownX = 0,
+                        mouseDownY = 0,
+                        mouseX = 0,
+                        mouseY = 0,
+                        startIndex = 0,
+                        mouseDrag = false;
+
+                    function init() {
+                        bindMouse();
+                    }
+
+                    function bindMouse() {
+                        document.addEventListener('mousedown', (event) => {
+                            if(event.button != 0) return true;
+
+                            let target = getTargetRow(event.target);
+                            if(target) {
+
+                                currRow = target;
+                                Array.from(currRow.children).forEach(td => {
+                                    td.style.width = td.offsetWidth + 'px';
+                                })
+
+                                table.style.width = table.offsetWidth;
+                                getAllChildrenRows();
+                                addDraggableRow(target);
+                                currRow.classList.add('is-dragging');
+                                startIndex = Array.from(tbody.children).indexOf(currRow);
+
+                                let coords = getMouseCoords(event);
+                                mouseDownX = coords.x;
+                                mouseDownY = coords.y;
+
+                                mouseDrag = true;
+                            }
+                        });
+
+                        document.addEventListener('mousemove', (event) => {
+                            if(!mouseDrag) return;
+
+                            let coords = getMouseCoords(event);
+                            mouseX = coords.x - mouseDownX;
+                            mouseY = coords.y - mouseDownY;
+
+                            moveRow(mouseX, mouseY);
+                        });
+
+                        document.addEventListener('mouseup', (event) => {
+                            if(!mouseDrag) return;
+
+                            currRow.classList.remove('is-dragging');
+                            tbody.removeChild(dragElem);
+                            table.classList.add('loading');
+
+                            setTimeout(() => {
+                                const tbody = table.querySelector('tbody');
+                                const currIndex = Array.from(tbody.children).indexOf(currRow);
+                                if (startIndex !== currIndex) {
+                                    newPosition = {
+                                        left: currIndex > 0 ? tbody.children[currIndex-1] : null,
+                                        right: (currIndex < (tbody.children.length - 1) ? tbody.children[currIndex+1] : null),
+                                        current: tbody.children[currIndex]
+                                    }
+                                    fetch(newPosition.current.querySelector('.sortable-position-url').value, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({
+                                            l: newPosition.left ? newPosition.left.querySelector('.sortable-position-datas').value : null,
+                                            r: newPosition.right ? newPosition.right.querySelector('.sortable-position-datas').value : null,
+                                            c: newPosition.current.querySelector('.sortable-position-datas').value,
+                                        }),
+                                    })
+                                        .then((response) => response.json())
+                                        //Then with the data from the response in JSON...
+                                        .then((data) => {
+                                            location.reload();
+                                        })
+                                        //Then with the error genereted...
+                                        .catch((error) => {
+                                            location.reload();
+                                        });
+                                } else {
+                                    table.classList.remove('loading');
+                                }
+                                Array.from(tbody.children).forEach((row) => {
+                                    row.classList.remove('draggable-hidden-row');
+                                })
+                            }, 50);
+
+                            dragElem = null;
+                            mouseDrag = false;
+                        });
+                    }
+
+                    function swapRow(row, index) {
+                        let currIndex = Array.from(tbody.children).indexOf(currRow),
+                            row1 = currIndex > index ? currRow : row,
+                            row2 = currIndex > index ? row : currRow;
+                        newPosition = {
+                            left: null, right: row1.nextSibling, current: currRow
+                        }
+                        tbody.insertBefore(row1, row2);
+                    }
+
+                    function moveRow(x, y) {
+                        dragElem.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
+
+                        let	dPos = dragElem.getBoundingClientRect(),
+                            currStartY = dPos.y, currEndY = currStartY + dPos.height,
+                            rows = getRows();
+
+                        for(var i = 0; i < rows.length; i++) {
+                            let rowElem = rows[i],
+                                rowSize = rowElem.getBoundingClientRect(),
+                                rowStartY = rowSize.y, rowEndY = rowStartY + rowSize.height;
+
+                            if(currRow !== rowElem
+                                && currRow.querySelector('.sortable-parent-id').value === rowElem.querySelector('.sortable-parent-id').value
+                                && isIntersecting(currStartY, currEndY, rowStartY, rowEndY)) {
+                                if(Math.abs(currStartY - rowStartY) < rowSize.height / 2)
+                                    swapRow(rowElem, i);
+                            }
+                        }
+                    }
+
+                    function getAllChildrenRows() {
+                        let id = currRow.querySelector('.sortable-id').value;
+                        Array.from(tbody.children).forEach((row) => {
+                            let parent = row.querySelector('.sortable-parent-id').value;
+                            if (id === parent) {
+                                row.classList.add('draggable-hidden-row');
+                            }
+                        })
+                    }
+
+                    function addDraggableRow(target) {
+                        dragElem = target.cloneNode(true);
+                        dragElem.classList.add('draggable-table__drag');
+                        dragElem.style.height = getStyle(target, 'height');
+                        dragElem.style.background = getStyle(target, 'backgroundColor');
+                        for(var i = 0; i < target.children.length; i++) {
+                            let oldTD = target.children[i],
+                                newTD = dragElem.children[i];
+                            newTD.style.width = getStyle(oldTD, 'width');
+                            newTD.style.height = getStyle(oldTD, 'height');
+                            newTD.style.padding = getStyle(oldTD, 'padding');
+                            newTD.style.margin = getStyle(oldTD, 'margin');
+                        }
+
+                        tbody.appendChild(dragElem);
+
+                        let tPos = target.getBoundingClientRect(),
+                            dPos = dragElem.getBoundingClientRect();
+                        dragElem.style.bottom = ((dPos.y - tPos.y) - tPos.height) + "px";
+                        dragElem.style.left = "-1px";
+
+                        document.dispatchEvent(new MouseEvent('mousemove',
+                            { view: window, cancelable: true, bubbles: true }
+                        ));
+                    }
+
+                    function getRows() {
+                        return table.querySelectorAll('tbody tr');
+                    }
+
+                    function getTargetRow(target) {
+                        let elemName = target.tagName.toLowerCase();
+
+                        if(elemName == 'i' && target.classList.contains("fa-arrows-alt-v")) {
+                            target = target.closest('button');
+                            elemName = target.tagName.toLowerCase();
+                        }
+
+                        if(elemName == 'button' && target.classList.contains("sortable-position")) return target.closest('tr');
+                        if(elemName == 'tr') return target;
+                        if(elemName == 'td') return target.closest('tr');
+                    }
+
+                    function getMouseCoords(event) {
+                        return {
+                            x: event.clientX,
+                            y: event.clientY
+                        };
+                    }
+
+                    function getStyle(target, styleName) {
+                        let compStyle = getComputedStyle(target),
+                            style = compStyle[styleName];
+
+                        return style ? style : null;
+                    }
+
+                    function isIntersecting(min0, max0, min1, max1) {
+                        return Math.max(min0, max0) >= Math.min(min1, max1) &&
+                            Math.min(min0, max0) <= Math.max(min1, max1);
+                    }
+
+                    init();
+                }
+
+            })();
+        </script>
+    {% endif %}
+
+{% endblock %}

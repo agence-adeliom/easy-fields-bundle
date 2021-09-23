@@ -1,0 +1,48 @@
+{
+    "name": "agence-adeliom/easy-fields-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony bundle for EasyAdmin",
+    "homepage": "https://github.com/tbmatuka/EditorjsBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tin Benjamin Matuka",
+            "homepage": "https://tbmatuka.com/"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/tbmatuka/EditorjsBundle/issues",
+        "source": "https://github.com/tbmatuka/EditorjsBundle"
+    },
+    "autoload": {
+        "psr-4": {
+            "Adeliom\\EasyFieldsBundle\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "symfony/config": "^4.0|^5.0",
+        "symfony/dependency-injection": "^4.0|^5.0",
+        "symfony/form": "^4.0|^5.0",
+        "symfony/framework-bundle": "^4.0|^5.0",
+        "symfony/http-foundation": "^4.0|^5.0",
+        "symfony/http-kernel": "^4.0|^5.0",
+        "symfony/options-resolver": "^4.0|^5.0",
+        "symfony/property-access": "^4.0|^5.0",
+        "symfony/routing": "^4.0|^5.0",
+        "symfony/twig-bundle": "^4.0|^5.0",
+        "easycorp/easyadmin-bundle": "^3.5",
+        "a2lix/translation-form-bundle": "^3.0",
+        "twig/intl-extra": "^2.14"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "symfony/framework-bundle": "^4.0",
+        "symfony/phpunit-bridge": "^4.1"
+    },
+    "scripts": {
+        "cs-fixer": "vendor/bin/php-cs-fixer fix -v --dry-run",
+        "cs-fixer-fix": "vendor/bin/php-cs-fixer fix -v"
+    }
+}

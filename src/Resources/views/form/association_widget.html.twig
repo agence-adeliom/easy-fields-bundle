@@ -1,0 +1,35 @@
+{% block entity_widget %}
+    <div class="d-flex">
+        <div class="widget flex-grow-1 pe-2">
+            {{ form_widget(form) }}
+        </div>
+        <div class="addons">
+            <div class="btn-group" role="group">
+            {% if list_selector|default(false) %}
+                <button type="button" class="btn btn-secondary"
+                        js-list-button
+                        data-cancel-label="{{ list_button_cancel_label|trans({}, 'EasyFieldsBundle') }}"
+                        data-validate-label="{{ list_button_validate_label|trans({}, 'EasyFieldsBundle') }}"
+                        data-show-filter="{{ list_show_filter }}"
+                        data-show-search="{{ list_show_search }}"
+                        data-filters="{{list_filters|json_encode()}}"
+                        data-columns="{{list_display_columns|json_encode()}}"
+                >
+                    <i class="fa {{ list_button_icon }} pr-1"></i>
+
+                    {{ list_button_label|trans({}, 'EasyFieldsBundle') }}
+                </button>
+            {% endif %}
+
+            {% if allow_add|default(false) %}
+                <button type="button" class="btn btn-primary" js-new-ajax-button>
+                    <i class="fa {{ button_add_icon }} pr-1"></i>
+                    {{ button_add_label|trans({}, 'EasyFieldsBundle') }}
+                </button>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include '@EasyFields/crud/includes/_ajax_modal.html.twig' %}
+{% endblock entity_widget %}

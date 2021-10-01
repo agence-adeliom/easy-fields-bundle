@@ -11,9 +11,10 @@ trait PositionSortableActionTrait {
 
     public function sortPositionAction(AdminContext $context): Response
     {
-        list($leftPrimaryKeyValue, $leftParentProperty) = $context->getRequest()->get('l') ? explode(':', $context->getRequest()->get('l')) : [null, null];
-        list($rightPrimaryKeyValue, $rightParentProperty) = $context->getRequest()->get('r') ? explode(':', $context->getRequest()->get('r')) : [null, null];
-        list($primaryKeyValue, $parentProperty) = $context->getRequest()->get('c') ? explode(':', $context->getRequest()->get('c')) : [null, null];
+        $requestContent = json_decode($context->getRequest()->getContent(), true);
+        list($leftPrimaryKeyValue, $leftParentProperty) = $requestContent['l'] ? explode(':', $requestContent['l']) : [null, null];
+        list($rightPrimaryKeyValue, $rightParentProperty) = $requestContent['r'] ? explode(':', $requestContent['r']) : [null, null];
+        list($primaryKeyValue, $parentProperty) = $requestContent['c'] ? explode(':', $requestContent['c']) : [null, null];
 
         /**
          * @var ContainerInterface $container

@@ -16,6 +16,7 @@ final class EnumField implements FieldInterface
     public const OPTION_ENUM = 'enum';
     public const OPTION_RENDER_AS_BADGES = 'renderAsBadges';
     public const OPTION_RENDER_EXPANDED = 'renderExpanded';
+    public const OPTION_ALLOW_MULTIPLE_CHOICES = 'allowMultipleChoices';
     public const OPTION_WIDGET = 'widget';
     public const OPTION_ESCAPE_HTML_CONTENTS = 'escapeHtml';
     public const VALID_BADGE_TYPES = ['success', 'warning', 'danger', 'info', 'primary', 'secondary', 'light', 'dark'];
@@ -38,7 +39,9 @@ final class EnumField implements FieldInterface
             ->setCustomOption(self::OPTION_RENDER_AS_BADGES, null)
             ->setCustomOption(self::OPTION_RENDER_EXPANDED, false)
             ->setCustomOption(self::OPTION_WIDGET, self::WIDGET_NATIVE)
-            ->setCustomOption(self::OPTION_ESCAPE_HTML_CONTENTS, true);
+            ->setCustomOption(self::OPTION_ESCAPE_HTML_CONTENTS, true)
+            ->setCustomOption(self::OPTION_ALLOW_MULTIPLE_CHOICES, false)
+            ;
     }
 
     /**
@@ -89,6 +92,13 @@ final class EnumField implements FieldInterface
     public function renderExpanded(bool $expanded = true): self
     {
         $this->setCustomOption(self::OPTION_RENDER_EXPANDED, $expanded);
+
+        return $this;
+    }
+
+    public function allowMultipleChoices(bool $allowMultipleChoices = true): self
+    {
+        $this->setCustomOption(self::OPTION_ALLOW_MULTIPLE_CHOICES, $allowMultipleChoices);
 
         return $this;
     }

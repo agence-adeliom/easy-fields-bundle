@@ -32,6 +32,7 @@ final class EnumConfigurator implements FieldConfiguratorInterface
     public function configure(FieldDto $field, EntityDto $entityDto, AdminContext $context): void
     {
         $isExpanded = $field->getCustomOption(EnumField::OPTION_RENDER_EXPANDED);
+        $isMultiple = $field->getCustomOption(EnumField::OPTION_ALLOW_MULTIPLE_CHOICES);
 
         $choices = $this->getChoices($field->getCustomOption(EnumField::OPTION_ENUM), $entityDto, $field);
 
@@ -41,6 +42,7 @@ final class EnumConfigurator implements FieldConfiguratorInterface
 
         $field->setFormTypeOptionIfNotSet('choices', $choices);
         $field->setFormTypeOptionIfNotSet('expanded', $isExpanded);
+        $field->setFormTypeOptionIfNotSet('multiple', $isMultiple);
 
 
         $field->setCustomOption(EnumField::OPTION_WIDGET, EnumField::WIDGET_NATIVE);

@@ -24,6 +24,8 @@ Is an extension of EasyAdmin's AssociationField that allow you to create new obj
 
 ```php
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
+
+// You have to add this form theme @EasyFields/form/association_widget.html.twig
 ...
 yield AssociationField::new('property', "label");
 ```
@@ -59,6 +61,8 @@ An A2lix TranslationFormBundle integration for EasyAdmin.
 
 ```php
 use Adeliom\EasyFieldsBundle\Admin\Field\TranslationField;
+
+// You have to add this form theme @EasyFields/form/translations_widget.html.twig
 ...
 yield TranslationField::new('property', "label", [
     'description' => [
@@ -80,6 +84,8 @@ An fork of Sonata's ChoiceMaskField for EasyAdmin.
 
 ```php
 use Adeliom\EasyFieldsBundle\Admin\Field\ChoiceMaskField;
+
+// You have to add this form theme @EasyFields/form/choice_mask_widget.html.twig
 ...
 yield ChoiceMaskField::new('property', "label")
     ->setChoices([
@@ -101,6 +107,8 @@ Is an extension of EasyAdmin's CollectionField that allow you to sort entries.
 
 ```php
 use Adeliom\EasyFieldsBundle\Admin\Field\SortableCollectionField;
+
+// You have to add this form theme @EasyFields/form/sortable_widget.html.twig
 ...
 // NOTE : property can be a *ToMany or an array.
 yield SortableCollectionField::new('property', "label")
@@ -113,7 +121,14 @@ yield SortableCollectionField::new('property', "label")
 
 ### PositionSortableField
 
-TODO
+#### Usage
+```php
+use Adeliom\EasyFieldsBundle\Admin\Field\PositionSortableField;
+
+// You have to add this form theme @EasyFields/form/form-easy-field-position-sortable.html.twig
+...
+yield PositionSortableField::new('property', "label");
+```
 
 ## License
 

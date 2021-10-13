@@ -34,6 +34,7 @@
         "symfony/property-access": "^4.4 || ^5.2",
         "easycorp/easyadmin-bundle": "^3.4",
         "stof/doctrine-extensions-bundle": "^1.5",
+        "symfony/psr-http-message-bridge" : "^2.0",
         "embed/embed": "^4.2"
     },
     "autoload": {

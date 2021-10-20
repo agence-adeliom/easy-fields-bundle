@@ -130,6 +130,27 @@ use Adeliom\EasyFieldsBundle\Admin\Field\PositionSortableField;
 yield PositionSortableField::new('property', "label");
 ```
 
+### OembedField
+
+#### Usage
+```php
+use Adeliom\EasyFieldsBundle\Admin\Field\OembedField;
+
+// You have to add this form theme @EasyFields/form/oembed_widget.html.twig
+...
+yield OembedField::new('property', "label");
+```
+
+##### Twig render
+
+```php
+# Get HTML code
+{{ property|oembed_html }}
+
+# Get Dimensions
+{{ property|oembed_size }}
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

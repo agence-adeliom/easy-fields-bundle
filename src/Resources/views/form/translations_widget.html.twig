@@ -32,19 +32,3 @@
 {% block a2lix_translationsForms_widget %}
     {{ block('a2lix_translations_widget') }}
 {% endblock %}
-
-{#{% block sylius_translations_row -%}#}
-{#        <ul class="nav nav-pills" role="tablist">#}
-{#            {% for translation in form %}#}
-{#                {{ form_label(translation, translation.vars.name|sylius_locale_name) }}#}
-{#            {% endfor %}#}
-{#        </ul>#}
-{#        <div class="tab-content">#}
-{#        {% for translation in form %}#}
-{#            <div class="tab-pane {% if app.request.locale == locale or form.vars.default_locale == locale %}show active{% endif %}" >#}
-{#                {{ form_widget(translation) }}#}
-{#                {{- form_errors(form) -}}#}
-{#            </div>#}
-{#        {% endfor %}#}
-{#        </div>#}
-{#{%- endblock sylius_translations_row %}#}

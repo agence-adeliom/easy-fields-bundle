@@ -6,6 +6,9 @@ services:
     Adeliom\EasyFieldsBundle\Form\Extension\:
         resource: '../../Form/Extension/'
 
+    Adeliom\EasyFieldsBundle\Controller\OembedController:
+        public: true
+
     Adeliom\EasyFieldsBundle\Form\SortableCollectionType:
         public: true
 
@@ -25,7 +28,12 @@ services:
         public: true
 
     Adeliom\EasyFieldsBundle\Admin\Field\Configurator\PositionSortableConfigurator:
-      public: true
+        public: true
+
+    Adeliom\EasyFieldsBundle\Twig\OembedExtension:
+        public: true
+        tags: [twig.extension]
+
 
     Adeliom\EasyFieldsBundle\EventListener\AdminListener:
         tags:

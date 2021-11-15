@@ -119,6 +119,28 @@ yield SortableCollectionField::new('property', "label")
     ;
 ```
 
+### IconField
+
+Is an icon picker.
+
+#### Usage
+
+```php
+use Adeliom\EasyFieldsBundle\Admin\Field\IconField;
+
+// You have to add this form theme @EasyFields/form/icon_widget.html.twig
+...
+yield IconField::new('property', "label")
+    ->setJsonUrl($url) // Must be a public json file with an array of your icon's classes
+    ->setFonts($fonts) // Must be an array of yours fonticon css file
+    ->setSelectButtonLabel() // Change label
+    ->setCancelButtonLabel()  // Change label
+    ->setShowAllButtonLabel()  // Change label
+    ->setSearchPlaceholder()  // Change label
+    ->setNotResultMessage()  // Change label
+    ;
+```
+
 ### PositionSortableField
 
 #### Usage

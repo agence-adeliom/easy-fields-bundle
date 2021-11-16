@@ -112,6 +112,7 @@ div#IconPickerModal .ip-icons-content .ip-icons-search-results p.ip-no-results-f
 div#IconPickerModal .ip-icons-content .ip-icons-area {
     padding: 10px;
     max-height:400px;
+    min-height:130px;
     overflow:hidden;
     position:relative;
     float: left;

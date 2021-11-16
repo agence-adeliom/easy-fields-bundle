@@ -8,7 +8,9 @@
             'data-row-id': id
         }) } %}{{ block('attributes') }}{% endwith %}>
             {{- form_label(form) -}}
+            <div class="w-field-icon">
             {{ form_widget(form) }}
+            </div>
             <div id="{{ form.vars.id }}_result">
                 <div class="get-and-preview">
                     <div class="preview-icon">
@@ -46,7 +48,7 @@
                     display: flex;
                     gap: 1rem;
                 }
-                .field-easy-field-iconpicker input[type="text"] {
+                .field-easy-field-iconpicker input[type="text"], .w-field-icon input[type="text"] {
                     display:none;
                 }
                 .get-and-preview .preview-icon {

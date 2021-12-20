@@ -29,7 +29,7 @@ class ChoiceMaskType extends AbstractType
             }
         }
 
-        $view->vars['all_fields'] = array_unique($allFieldNames);
+        $view->vars['all_fields'] = array_values(array_unique($allFieldNames));
         $view->vars['map'] = $sanitizedMap;
 
         $options['expanded'] = false;

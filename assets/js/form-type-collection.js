@@ -2,16 +2,18 @@ import Sortable from 'sortablejs';
 window.$ = window.jQuery = require('jquery');
 
 const eaSortableCollectionHandler = function (event) {
-    document.querySelectorAll('button.field-collection-add-button').forEach((addButton) => {
+    document.querySelectorAll('button.field-collection-add-button:not(.processed)').forEach((addButton) => {
         const collection = addButton.closest('[data-ea-collection-field]');
-
-        if (!collection || collection.classList.contains('processed')) {
+        if (!collection || addButton.classList.contains('processed')) {
             return;
         }
-
         EaSortableCollectionProperty.handleAddButton(addButton, collection);
         EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
         EaSortableCollectionProperty.updateCollectionSortable(collection);
+    });
+
+    document.querySelectorAll('button.field-collection-add-button[disabled]').forEach((addButton) => {
+        addButton.disabled = false;
     });
 
     document.querySelectorAll('button.field-collection-delete-button').forEach((deleteButton) => {
@@ -32,7 +34,7 @@ document.addEventListener('ea.collection.item-added', eaSortableCollectionHandle
 
 const EaSortableCollectionProperty = {
     handleAddButton: (addButton, collection) => {
-        addButton.addEventListener('click', function() {
+        addButton.addEventListener('click', function(e) {
             const isArrayCollection = collection.classList.contains('field-array');
             // Use a counter to avoid having the same index more than once
             let numItems = parseInt(collection.dataset.numItems);
@@ -73,7 +75,7 @@ const EaSortableCollectionProperty = {
             })
         });
 
-        collection.classList.add('processed');
+        addButton.classList.add('processed');
     },
     updateCollectionSortable: (collection) => {
         if (null === collection) {

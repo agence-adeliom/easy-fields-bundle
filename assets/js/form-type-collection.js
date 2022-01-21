@@ -111,7 +111,7 @@ const EaSortableCollectionProperty = {
                 }
                 let index = input.name.match(/\[\d+\]/g);
                 if (index){
-                    input.name = input.name.replace(index[0], '['+key+']')
+                    input.name = input.name.replace(index[index.length - 1], '['+key+']')
                 }
             })
         })

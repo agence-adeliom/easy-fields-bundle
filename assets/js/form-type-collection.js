@@ -1,12 +1,16 @@
 import Sortable from 'sortablejs';
 window.$ = window.jQuery = require('jquery');
 
+
 const eaSortableCollectionHandler = function (event) {
     document.querySelectorAll('button.field-sortable_collection-add-button:not(.processed)').forEach((addButton) => {
         const collection = addButton.closest('[data-ea-collection-field]');
+        let level = 0;
+        let levelItem = addButton;
         if (!collection || addButton.classList.contains('processed')) {
             return;
         }
+        collection.dataset.level = EaSortableCollectionProperty.queryParentsSelectorAll('[data-ea-collection-field]', addButton).length;
         EaSortableCollectionProperty.handleAddButton(addButton, collection);
         EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
         EaSortableCollectionProperty.updateCollectionSortable(collection);
@@ -33,6 +37,22 @@ window.addEventListener('DOMContentLoaded', eaSortableCollectionHandler);
 document.addEventListener('ea.collection.item-added', eaSortableCollectionHandler);
 
 const EaSortableCollectionProperty = {
+    queryParentsSelector: function(selector, elm){
+        for(var parent = elm.parentElement; parent != null; parent = parent.parentElement) {
+            if(parent.matches && parent.matches(selector)) return parent;
+        }
+        return null;
+    },
+    queryParentsSelectorAll: function(selector, elm){
+        var result = [];
+        for(var parent = elm.parentElement; parent != null; parent = parent.parentElement) {
+            if(typeof selector == "undefined" || selector === "")
+                result.push(parent);
+            else if(parent.matches && parent.matches(selector))
+                result.push(parent);
+        }
+        return result;
+    },
     handleAddButton: (addButton, collection) => {
         addButton.addEventListener('click', function(e) {
             const isArrayCollection = collection.classList.contains('field-array');
@@ -102,7 +122,6 @@ const EaSortableCollectionProperty = {
             return;
         }
 
-
         const collectionItems = collection.querySelectorAll('.field-sortable_collection-item');
         collectionItems.forEach((item, key) => {
             item.querySelectorAll('[name]').forEach((input) => {
@@ -111,7 +130,11 @@ const EaSortableCollectionProperty = {
                 }
                 let index = input.name.match(/\[\d+\]/g);
                 if (index){
-                    input.name = input.name.replace(index[index.length - 1], '['+key+']')
+                    var i = 0;
+                    input.name = input.name.replace(/\[\d+\]/g,function (match, pos, original) {
+                        i++;
+                        return (i == collection.dataset.level) ? '['+key+']' : match;
+                    })
                 }
             })
         })

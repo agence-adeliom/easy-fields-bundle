@@ -38,7 +38,7 @@
     {% endif %}
 
     {% if allow_add|default(false) %}
-        <button type="button" class="btn btn-link field-collection-add-button">
+        <button type="button" class="btn btn-link field-sortable_collection-add-button">
             <i class="fa fa-plus pr-1"></i>
             {{ 'action.add_new_item'|trans({}, 'EasyAdminBundle') }}
         </button>
@@ -67,21 +67,21 @@
     {% endif %}
 
     {% set delete_item_button %}
-        <button type="button" class="btn btn-link btn-link-danger field-collection-delete-button" style="position: static"
+        <button type="button" class="btn btn-link btn-link-danger field-sortable_collection-delete-button" style="position: static"
                 title="{{ 'action.remove_item'|trans({}, 'EasyAdminBundle') }}">
             <i class="far fa-trash-alt"></i>
         </button>
     {% endset %}
 
     {% set drag_item_button %}
-        <button type="button" class="btn btn-link btn-link-secondary field-collection-drag-button" style="cursor:move;"
+        <button type="button" class="btn btn-link btn-link-secondary field-sortable_collection-drag-button" style="cursor:move;"
                 title="{{ 'action.drag_item'|trans({}, 'EasyAdminBundle') }}">
             <i class="fas fa-arrows-alt-v"></i>
         </button>
     {% endset %}
 
 
-    <div class="field-collection-item {{ is_complex ? 'field-collection-item-complex' }} bg-white border rounded mb-1 {{ error ? "border-danger"}} " >
+    <div class="field-sortable_collection-item {{ is_complex ? 'field-sortable_collection-item-complex' }} bg-white border rounded mb-1 {{ error ? "border-danger"}} " >
         {% if is_array_field|default(false) %}
             {{ form_widget(form) }}
             {% if allows_deleting_items %}

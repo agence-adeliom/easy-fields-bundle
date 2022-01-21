@@ -2,7 +2,7 @@ import Sortable from 'sortablejs';
 window.$ = window.jQuery = require('jquery');
 
 const eaSortableCollectionHandler = function (event) {
-    document.querySelectorAll('button.field-collection-add-button:not(.processed)').forEach((addButton) => {
+    document.querySelectorAll('button.field-sortable_collection-add-button:not(.processed)').forEach((addButton) => {
         const collection = addButton.closest('[data-ea-collection-field]');
         if (!collection || addButton.classList.contains('processed')) {
             return;
@@ -12,11 +12,11 @@ const eaSortableCollectionHandler = function (event) {
         EaSortableCollectionProperty.updateCollectionSortable(collection);
     });
 
-    document.querySelectorAll('button.field-collection-add-button[disabled]').forEach((addButton) => {
+    document.querySelectorAll('button.field-sortable_collection-add-button[disabled]').forEach((addButton) => {
         addButton.disabled = false;
     });
 
-    document.querySelectorAll('button.field-collection-delete-button').forEach((deleteButton) => {
+    document.querySelectorAll('button.field-sortable_collection-delete-button').forEach((deleteButton) => {
         deleteButton.addEventListener('click', () => {
             const collection = deleteButton.closest('[data-ea-collection-field]');
 
@@ -63,7 +63,7 @@ const EaSortableCollectionProperty = {
                     EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
                     EaSortableCollectionProperty.updateCollectionSortable(collection);
 
-                    const collectionItems = collectionItemsWrapper.querySelectorAll('.field-collection-item');
+                    const collectionItems = collectionItemsWrapper.querySelectorAll('.field-sortable_collection-item');
                     const lastElement = collectionItems[collectionItems.length - 1];
                     const lastElementCollapseButton = lastElement.querySelector('.accordion-button');
                     lastElementCollapseButton.classList.remove('collapsed');
@@ -89,7 +89,7 @@ const EaSortableCollectionProperty = {
             }
 
             collection.sortable = Sortable.create(collection.querySelector(".ea-form-collection-items .accordion > .form-widget-compound > div"),{
-                handle: '.field-collection-drag-button',
+                handle: '.field-sortable_collection-drag-button',
                 direction: 'vertical',
                 onEnd: function (evt) {
                     EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
@@ -103,28 +103,33 @@ const EaSortableCollectionProperty = {
         }
 
 
-        const collectionItems = collection.querySelectorAll('.field-collection-item');
+        const collectionItems = collection.querySelectorAll('.field-sortable_collection-item');
         collectionItems.forEach((item, key) => {
             item.querySelectorAll('[name]').forEach((input) => {
+                if (!input.name){
+                    return;
+                }
                 let index = input.name.match(/\[\d+\]/g);
-                input.name = input.name.replace(index[0], '['+key+']')
+                if (index){
+                    input.name = input.name.replace(index[0], '['+key+']')
+                }
             })
         })
 
-        collectionItems.forEach((item) => item.classList.remove('field-collection-item-first', 'field-collection-item-last'));
+        collectionItems.forEach((item) => item.classList.remove('field-sortable_collection-item-first', 'field-sortable_collection-item-last'));
 
 
         const firstElement = collectionItems[0];
         if (undefined === firstElement) {
             return;
         }
-        firstElement.classList.add('field-collection-item-first');
+        firstElement.classList.add('field-sortable_collection-item-first');
 
         const lastElement = collectionItems[collectionItems.length - 1];
         if (undefined === lastElement) {
             return;
         }
-        lastElement.classList.add('field-collection-item-last');
+        lastElement.classList.add('field-sortable_collection-item-last');
     },
     loadStyle(src) {
         return new Promise(function (resolve, reject) {

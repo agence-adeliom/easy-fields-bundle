@@ -1,5 +1,5 @@
 
-{% if field.value is defined %}
+{% if field.value is defined and field.value is not null %}
     {% set url = field.value %}
 {% endif %}
 

@@ -57,7 +57,7 @@ const EaSortableCollectionProperty = {
         addButton.addEventListener('click', function(e) {
             const isArrayCollection = collection.classList.contains('field-array');
             // Use a counter to avoid having the same index more than once
-            let numItems = parseInt(collection.dataset.numItems);
+            const numItems = parseInt(collection.dataset.numItems, 10) + 1;
 
             // Remove the 'Empty Collection' badge, if present
             const emptyCollectionBadge = this.parentElement.querySelector('.collection-empty');
@@ -65,15 +65,19 @@ const EaSortableCollectionProperty = {
                 emptyCollectionBadge.outerHTML = isArrayCollection ? '<div class="ea-form-collection-items"></div>' : '<div class="ea-form-collection-items"><div class="accordion border-0 shadow-none"><div class="form-widget-compound"><div></div></div></div></div>';
             }
 
-            const formTypeNamePlaceholder = collection.dataset.formTypeNamePlaceholder;
-            const labelRegexp = new RegExp(formTypeNamePlaceholder + 'label__', 'g');
-            const nameRegexp = new RegExp(formTypeNamePlaceholder, 'g');
+            const formName = this.closest('.ea-edit-form').getAttribute('name');
+            // TODO : Should be dynamic ?
+            const panel = 'content';
+
+            const formTypeNamePlaceholder = parseInt(collection.dataset.formTypeNamePlaceholder, 10);
+            const attributesRegexp = new RegExp(`(${formName}_${panel}_${formTypeNamePlaceholder}_[a-zA-Z0-9]*_)${formTypeNamePlaceholder}`, 'g');
+            const nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${formTypeNamePlaceholder}\\]\\[[a-zA-Z0-9]*\\]\\[)${formTypeNamePlaceholder}`, 'g');
 
             let newItemHtml = collection.dataset.prototype
-                .replace(labelRegexp, numItems)
-                .replace(nameRegexp, numItems);
+                .replace(attributesRegexp, `$1${numItems}`)
+                .replace(nameRegexp, `$1${numItems}`);
 
-            collection.dataset.numItems = ++numItems;
+            collection.dataset.numItems = numItems;
             const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound > div';
             const collectionItemsWrapper = collection.querySelector(newItemInsertionSelector);
 

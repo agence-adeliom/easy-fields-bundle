@@ -34,7 +34,7 @@ final class SortableCollectionField implements FieldInterface
             ->setTemplatePath('@EasyFields/crud/field/sortable_collection.html.twig')
             ->setFormType(SortableCollectionType::class)
             ->addCssClass('field-collection field-collection_sortable')
-            ->addJsFiles('bundles/easyfields/form-type-collection.js')
+            ->addJsFiles('bundles/easyfields/form-type-collection-sortable.js')
             ->setDefaultColumns('col-md-8 col-xxl-7')
             ->setCustomOption(self::OPTION_ALLOW_DRAG, true)
             ->setCustomOption(self::OPTION_ALLOW_ADD, true)

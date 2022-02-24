@@ -97,6 +97,19 @@ const EaCollectionProperty = {
                 lastElementBody.classList.add('show');
             }
 
+            // allow Vue Media library script to be reexecuted for the image fields
+            const tmp = document.createElement("div");
+            tmp.innerHTML = newItemHtml;
+            Array.from(tmp.querySelectorAll("script")).forEach( oldScript => {
+                if(oldScript.dataset.collectionImageId !== undefined){
+                    let script = document.createElement('script');
+                    script.src = oldScript.src;
+                    script.type = "text/javascript"
+                    script.dataset.collectionImageId = oldScript.dataset.collectionImageId;
+                    document.head.append(script);
+                }
+            });
+
             document.dispatchEvent(new Event('ea.collection.item-added'));
         });
 

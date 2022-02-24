@@ -65,7 +65,7 @@ const EaSortableCollectionProperty = {
                 emptyCollectionBadge.outerHTML = isArrayCollection ? '<div class="ea-form-collection-items"></div>' : '<div class="ea-form-collection-items"><div class="accordion"><div class="form-widget-compound"></div></div></div>';
             }
 
-            const formName = this.closest('.ea-edit-form').getAttribute('name');
+            const formName = this.closest('.ea-edit-form, .ea-new-form').getAttribute('name');
             // TODO : Should be dynamic ?
             const panel = 'content';
 

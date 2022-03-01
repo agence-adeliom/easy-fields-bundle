@@ -66,12 +66,40 @@ const EaSortableCollectionProperty = {
             }
 
             const formName = this.closest('.ea-edit-form, .ea-new-form').getAttribute('name');
-            // TODO : Should be dynamic ?
-            const panel = 'content';
+            let panel = 'content';
+            let placeholderName = parseInt(collection.dataset.formTypeNamePlaceholder, 10);
+            placeholderName = isNaN(placeholderName) ? collection.dataset.formTypeNamePlaceholder : placeholderName;
+            let placeholderNumber = placeholderName;
+            let attributesRegexp;
+            let nameRegexp;
 
-            const formTypeNamePlaceholder = parseInt(collection.dataset.formTypeNamePlaceholder, 10);
-            const attributesRegexp = new RegExp(`(${formName}_${panel}_${formTypeNamePlaceholder}_[a-zA-Z0-9]*_)${formTypeNamePlaceholder}`, 'g');
-            const nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${formTypeNamePlaceholder}\\]\\[[a-zA-Z0-9]*\\]\\[)${formTypeNamePlaceholder}`, 'g');
+            if(collection.dataset.prototype.match(new RegExp(`${formName}_${panel}`)) !== null){
+                // we're inside the content collection, in a second level collection
+
+                // if true, it means it was already in the content when the page was loaded
+                // and we need to get the position first to be able to update the name attributes
+                // example : Page_content_1_list___name___puce
+                if(placeholderName === '__name__'){
+                    const parent = collection.closest(`[id^="${formName}_${panel}_"`);
+                    const parentPosition = parent.getAttribute('id').replace(`${formName}_${panel}_`, '');
+                    placeholderName = parentPosition;
+                }else{
+                    // then we're in a newly loaded block with already defined position in the prototype
+                    // example : Page_content_9_list_9_puce
+                }
+
+                attributesRegexp = new RegExp(`(${formName}_${panel}_${placeholderName}_[a-zA-Z0-9]*_)${placeholderNumber}`, 'g');
+                nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${placeholderName}\\]\\[[a-zA-Z0-9]*\\]\\[)${placeholderNumber}`, 'g');
+            }else{
+
+                // we're not inside the content collection but direclty in a first level collection
+                const matches = collection.dataset.prototype.match(new RegExp(`${formName}_([a-zA-Z0-9]+)___name__.*\"`));
+                if(matches !== null && matches.length > 1){
+                    panel = matches[1];
+                    attributesRegexp = new RegExp(`(${formName}_${panel}_)${placeholderName}`, 'g');
+                    nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[)${placeholderName}`, 'g');
+                }
+            }
 
             let newItemHtml = collection.dataset.prototype
                 .replace(attributesRegexp, `$1${++numItems}`)
@@ -186,6 +214,7 @@ const EaSortableCollectionProperty = {
         var tmp = document.createElement("div");
         tmp.innerHTML = html;
         let remote = [];
+
         Array.from(tmp.querySelectorAll("script")).forEach( oldScript => {
             if(oldScript.src){
                 remote.push(EaSortableCollectionProperty.loadScript(oldScript.src));
@@ -194,7 +223,11 @@ const EaSortableCollectionProperty = {
 
         return Promise.all(remote).then(values => {
             elm.insertAdjacentHTML('beforeend', html);
-            Array.from(elm.lastElementChild.querySelectorAll("script")).forEach( oldScript => {
+            let element = elm.lastElementChild;
+            if (element.classList.contains("flex-fill")){
+                element = element.previousElementSibling
+            }
+            Array.from(element.querySelectorAll("script")).forEach( oldScript => {
                 if(!oldScript.src){
                     const newScript = document.createElement("script");
                     Array.from(oldScript.attributes).forEach( attr => newScript.setAttribute(attr.name, attr.value) );

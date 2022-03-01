@@ -81,36 +81,24 @@ const EaCollectionProperty = {
                 .replace(nameRegexp, `$1${numItems}`);
 
             collection.dataset.numItems = numItems;
-            const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound';
+            const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound > div';
             const collectionItemsWrapper = collection.querySelector(newItemInsertionSelector);
 
-            collectionItemsWrapper.insertAdjacentHTML('beforeend', newItemHtml);
-            // for complex collections of items, show the newly added item as not collapsed
-            if (!isArrayCollection) {
-                EaCollectionProperty.updateCollectionItemCssClasses(collection);
+            EaCollectionProperty.setInnerHTML(collectionItemsWrapper, newItemHtml).then(() => {
+                // for complex collections of items, show the newly added item as not collapsed
+                if (!isArrayCollection) {
+                    EaCollectionProperty.updateCollectionItemCssClasses(collection);
 
-                const collectionItems = collectionItemsWrapper.querySelectorAll('.field-collection-item');
-                const lastElement = collectionItems[collectionItems.length - 1];
-                const lastElementCollapseButton = lastElement.querySelector('.accordion-button');
-                lastElementCollapseButton.classList.remove('collapsed');
-                const lastElementBody = lastElement.querySelector('.accordion-collapse');
-                lastElementBody.classList.add('show');
-            }
-
-            // allow Vue Media library script to be reexecuted for the image fields
-            const tmp = document.createElement("div");
-            tmp.innerHTML = newItemHtml;
-            Array.from(tmp.querySelectorAll("script")).forEach( oldScript => {
-                if(oldScript.dataset.collectionImageId !== undefined){
-                    let script = document.createElement('script');
-                    script.src = oldScript.src;
-                    script.type = "text/javascript"
-                    script.dataset.collectionImageId = oldScript.dataset.collectionImageId;
-                    document.head.append(script);
+                    const collectionItems = collectionItemsWrapper.querySelectorAll('.field-collection-item');
+                    const lastElement = collectionItems[collectionItems.length - 1];
+                    const lastElementCollapseButton = lastElement.querySelector('.accordion-button');
+                    lastElementCollapseButton.classList.remove('collapsed');
+                    const lastElementBody = lastElement.querySelector('.accordion-collapse');
+                    lastElementBody.classList.add('show');
                 }
-            });
 
-            document.dispatchEvent(new Event('ea.collection.item-added'));
+                document.dispatchEvent(new Event('ea.collection.item-added'));
+            })
         });
 
         collection.classList.add('processed');
@@ -135,5 +123,56 @@ const EaCollectionProperty = {
             return;
         }
         lastElement.classList.add('field-collection-item-last');
+    },
+    loadStyle(src) {
+        return new Promise(function (resolve, reject) {
+            let link = document.createElement('link');
+            link.href = src;
+            link.rel = 'stylesheet';
+
+            link.onload = () => resolve(link);
+            link.onerror = () => reject(new Error(`Style load error for ${src}`));
+
+            document.head.append(link);
+        });
+    },
+    loadScript(src) {
+        return new Promise(function (resolve, reject) {
+            let script = document.createElement('script');
+            script.src = src;
+            script.type = "text/javascript"
+
+            script.onload = () => resolve(script);
+            script.onerror = () => reject(new Error(`Style load error for ${src}`));
+
+            document.head.append(script);
+        });
+    },
+    setInnerHTML(elm, html) {
+        var tmp = document.createElement("div");
+        tmp.innerHTML = html;
+        let remote = [];
+
+        Array.from(tmp.querySelectorAll("script")).forEach( oldScript => {
+            if(oldScript.src){
+                remote.push(EaCollectionProperty.loadScript(oldScript.src));
+            }
+        });
+
+        return Promise.all(remote).then(values => {
+            elm.insertAdjacentHTML('beforeend', html);
+            let element = elm.lastElementChild;
+            if (element.classList.contains("flex-fill")){
+                element = element.previousElementSibling
+            }
+            Array.from(element.querySelectorAll("script")).forEach( oldScript => {
+                if(!oldScript.src){
+                    const newScript = document.createElement("script");
+                    Array.from(oldScript.attributes).forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                }
+            });
+        });
     }
 };

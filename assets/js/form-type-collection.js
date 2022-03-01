@@ -36,7 +36,7 @@ const EaCollectionProperty = {
             // Remove the 'Empty Collection' badge, if present
             const emptyCollectionBadge = this.parentElement.querySelector('.collection-empty');
             if (null !== emptyCollectionBadge) {
-                emptyCollectionBadge.outerHTML = isArrayCollection ? '<div class="ea-form-collection-items"></div>' : '<div class="ea-form-collection-items"><div class="accordion"><div class="form-widget-compound"></div></div></div>';
+                emptyCollectionBadge.parentElement.outerHTML = isArrayCollection ? '<div class="ea-form-collection-items"></div>' : '<div class="ea-form-collection-items"><div class="accordion"><div class="form-widget-compound"></div></div></div>';
             }
 
             const formName = this.closest('.ea-edit-form, .ea-new-form').getAttribute('name');
@@ -81,7 +81,7 @@ const EaCollectionProperty = {
                 .replace(nameRegexp, `$1${numItems}`);
 
             collection.dataset.numItems = numItems;
-            const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound > div';
+            const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound';
             const collectionItemsWrapper = collection.querySelector(newItemInsertionSelector);
 
             EaCollectionProperty.setInnerHTML(collectionItemsWrapper, newItemHtml).then(() => {

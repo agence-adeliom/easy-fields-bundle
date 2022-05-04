@@ -10,6 +10,9 @@
         'data-allow-delete': allow_delete ? 'true' : 'false',
         'data-num-items': form.children|length,
         'data-form-type-name-placeholder': prototype is defined ? prototype.vars.name : '',
+        'data-form-type-id': id,
+        'data-form-type-parent-id': form.parent is defined ? form.parent.vars.id : '',
+        'data-form-type-parent-name': form.parent is defined ? form.parent.vars.name : '',
     }) %}
 
     {{ block('form_row') }}

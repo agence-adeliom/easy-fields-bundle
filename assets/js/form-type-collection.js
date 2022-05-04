@@ -40,39 +40,23 @@ const EaCollectionProperty = {
             }
 
             const formName = this.closest('.ea-edit-form, .ea-new-form').getAttribute('name');
+            let panel = collection.dataset.formTypeParentName ?? 'content';
 
-            let panel = 'content';
+            let formPanelPattern = `${formName}_${panel}`;
             let placeholderName = parseInt(collection.dataset.formTypeNamePlaceholder, 10);
             placeholderName = isNaN(placeholderName) ? collection.dataset.formTypeNamePlaceholder : placeholderName;
-            let placeholderNumber = placeholderName;
             let attributesRegexp;
             let nameRegexp;
 
-            if(collection.dataset.prototype.match(new RegExp(`${formName}_${panel}`)) !== null){
-                // we're inside the content collection, in a second level collection
-
-                // if true, it means it was already in the content when the page was loaded
-                // and we need to get the position first to be able to update the name attributes
-                // example : Page_content_1_list___name___puce
-                if(placeholderName === '__name__'){
-                    const parent = collection.closest(`[id^="${formName}_${panel}_"`);
-                    const parentPosition = parent.getAttribute('id').replace(`${formName}_${panel}_`, '');
-                    placeholderName = parentPosition;
-                }else{
-                    // then we're in a newly loaded block with already defined position in the prototype
-                    // example : Page_content_9_list_9_puce
-                }
-
-                attributesRegexp = new RegExp(`(${formName}_${panel}_${placeholderName}_[a-zA-Z0-9]*_)${placeholderNumber}`, 'g');
-                nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${placeholderName}\\]\\[[a-zA-Z0-9]*\\]\\[)${placeholderNumber}`, 'g');
-            }else{
-
-                // we're not inside the content collection but direclty in a first level collection
-                const matches = collection.dataset.prototype.match(new RegExp(`${formName}_([a-zA-Z0-9]+)___name__.*\"`));
-                if(matches !== null && matches.length > 1){
-                    panel = matches[1];
-                    attributesRegexp = new RegExp(`(${formName}_${panel}_)${placeholderName}`, 'g');
-                    nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[)${placeholderName}`, 'g');
+            // we're not inside the content collection but direclty in a first level collection
+            const matches = collection.dataset.prototype.match(new RegExp(`${formPanelPattern}_([a-zA-Z0-9]+)___name__.*\"`));
+            if(matches !== null && matches.length > 1){
+                if (!collection.dataset.formTypeParentName) {
+                    attributesRegexp = new RegExp(`(${formPanelPattern}_)${placeholderName}`, 'g');
+                    nameRegexp = new RegExp(`(${formName}\\[${matches[1]}\\]\\[)${placeholderName}`, 'g');
+                } else {
+                    attributesRegexp = new RegExp(`(${formPanelPattern}_)${placeholderName}`, 'g');
+                    nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${matches[1]}\\]\\[)${placeholderName}`, 'g');
                 }
             }
 

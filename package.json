@@ -20,13 +20,10 @@
     "sass-loader": "^12.1.0"
   },
   "dependencies": {
-    "@editorjs/editorjs": "^2.22.2",
     "@popperjs/core": "^2.9.3",
     "bootstrap": "^5.1.0",
-    "grapesjs": "^0.17.22",
     "jquery": "^3.6.0",
-    "npm": "^7.19.1",
-    "npx": "^10.2.2",
+    "npm": "^8",
     "sortablejs": "^1.14.0"
   }
 }

@@ -58,6 +58,13 @@ const EaCollectionProperty = {
                     attributesRegexp = new RegExp(`(${formPanelPattern}_)${placeholderName}`, 'g');
                     nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${matches[1]}\\]\\[)${placeholderName}`, 'g');
                 }
+            }else{
+                const matches = collection.dataset.prototype.match(new RegExp(`${formName}_([a-zA-Z0-9]+)___name__.*\"`));
+                if(matches !== null && matches.length > 1){
+                    panel = matches[1];
+                    attributesRegexp = new RegExp(`(${formName}_${panel}_)${placeholderName}`, 'g');
+                    nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[)${placeholderName}`, 'g');
+                }
             }
 
             let newItemHtml = collection.dataset.prototype

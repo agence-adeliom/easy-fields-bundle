@@ -65,37 +65,13 @@ const EaSortableCollectionProperty = {
                 emptyCollectionBadge.parentElement.outerHTML = isArrayCollection ? '<div class="ea-form-collection-items"></div>' : '<div class="ea-form-collection-items"><div class="accordion"><div class="form-widget-compound"></div></div></div>';
             }
 
-            const formName = this.closest('.ea-edit-form, .ea-new-form').getAttribute('name');
-            let panel = collection.dataset.formTypeParentName ?? 'content';
-
-            let formPanelPattern = `${formName}_${panel}`;
-            let placeholderName = parseInt(collection.dataset.formTypeNamePlaceholder, 10);
-            placeholderName = isNaN(placeholderName) ? collection.dataset.formTypeNamePlaceholder : placeholderName;
-            let attributesRegexp;
-            let nameRegexp;
-
-            // we're not inside the content collection but direclty in a first level collection
-            const matches = collection.dataset.prototype.match(new RegExp(`${formPanelPattern}_([a-zA-Z0-9]+)___name__.*\"`));
-            if(matches !== null && matches.length > 1){
-                if (!collection.dataset.formTypeParentName) {
-                    attributesRegexp = new RegExp(`(${formPanelPattern}_)${placeholderName}`, 'g');
-                    nameRegexp = new RegExp(`(${formName}\\[${matches[1]}\\]\\[)${placeholderName}`, 'g');
-                } else {
-                    attributesRegexp = new RegExp(`(${formPanelPattern}_)${placeholderName}`, 'g');
-                    nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[${matches[1]}\\]\\[)${placeholderName}`, 'g');
-                }
-            }else{
-                const matches = collection.dataset.prototype.match(new RegExp(`${formName}_([a-zA-Z0-9]+)___name__.*\"`));
-                if(matches !== null && matches.length > 1){
-                    panel = matches[1];
-                    attributesRegexp = new RegExp(`(${formName}_${panel}_)${placeholderName}`, 'g');
-                    nameRegexp = new RegExp(`(${formName}\\[${panel}\\]\\[)${placeholderName}`, 'g');
-                }
-            }
+            const formTypeNamePlaceholder = collection.dataset.formTypeNamePlaceholder;
+            const labelRegexp = new RegExp(formTypeNamePlaceholder + 'label__', 'g');
+            const nameRegexp = new RegExp(formTypeNamePlaceholder, 'g');
 
             let newItemHtml = collection.dataset.prototype
-                .replace(attributesRegexp, `$1${++numItems}`)
-                .replace(nameRegexp, `$1${numItems}`);
+              .replace(labelRegexp, ++numItems)
+              .replace(nameRegexp, numItems);
 
             collection.dataset.numItems = numItems;
             const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound';

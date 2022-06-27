@@ -4,7 +4,7 @@ namespace Adeliom\EasyFieldsBundle\Form\Extension;
 
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudAutocompleteType;
-use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
@@ -14,13 +14,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EntityTypeExtension extends AbstractTypeExtension
 {
     /**
-     * @var CrudUrlGenerator CrudUrlGenerator
+     * @var AdminUrlGenerator AdminUrlGenerator
      */
-    protected $crudUrlGenerator;
+    protected $adminUrlGenerator;
 
-    public function __construct(CrudUrlGenerator $crudUrlGenerator)
+    public function __construct(AdminUrlGenerator $adminUrlGenerator)
     {
-        $this->crudUrlGenerator = $crudUrlGenerator;
+        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     /**
@@ -54,9 +54,10 @@ class EntityTypeExtension extends AbstractTypeExtension
 
         if (isset($options[AssociationField::OPTION_ALLOW_ADD]) && $options[AssociationField::OPTION_ALLOW_ADD]) {
             if (!empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
-                $ajaxEndpointUrl = $this->crudUrlGenerator->build();
-                $ajaxEndpointUrl->setController($options[AssociationField::OPTION_CRUD_CONTROLLER]);
-                $ajaxEndpointUrl->setAction('new')->generateUrl();
+                $ajaxEndpointUrl = $this->adminUrlGenerator
+                    ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
+                    ->setAction('new')
+                    ->generateUrl();
                 $view->vars['attr']['data-ea-ajax-new-endpoint-url'] = $ajaxEndpointUrl;
             }
         }
@@ -64,9 +65,10 @@ class EntityTypeExtension extends AbstractTypeExtension
 
         if (isset($options[AssociationField::OPTION_LIST_SELECTOR]) && $options[AssociationField::OPTION_LIST_SELECTOR]) {
             if (!empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
-                $ajaxEndpointUrl = $this->crudUrlGenerator->build();
-                $ajaxEndpointUrl->setController($options[AssociationField::OPTION_CRUD_CONTROLLER]);
-                $ajaxEndpointUrl->setAction('index')->generateUrl();
+                $ajaxEndpointUrl = $this->adminUrlGenerator
+                    ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
+                    ->setAction('index')
+                    ->generateUrl();
                 $view->vars['attr']['data-ea-ajax-index-url'] = $ajaxEndpointUrl;
             }
         }

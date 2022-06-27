@@ -134,7 +134,7 @@ class SortableCollectionType extends CollectionType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'sortable_collection';
     }

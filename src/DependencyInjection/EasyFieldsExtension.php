@@ -17,7 +17,7 @@ class EasyFieldsExtension extends Extension
     }
 
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'easy_fields';
     }

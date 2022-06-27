@@ -13,7 +13,7 @@ class OembedExtension extends AbstractExtension
     private $embed;
     private $url;
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('oembed_html', [$this, 'getCode'], ["is_safe" => ["html"]]),
@@ -21,7 +21,7 @@ class OembedExtension extends AbstractExtension
         ];
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             //new TwigFunction('oembed', [$this, 'getOembed']),

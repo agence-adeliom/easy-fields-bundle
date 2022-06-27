@@ -11,7 +11,7 @@ class OembedType extends AbstractType
     /**
      * @phpstan-return class-string<FormTypeInterface>
      */
-    public function getParent(): string
+    public function getParent(): ?string
     {
         return UrlType::class;
     }

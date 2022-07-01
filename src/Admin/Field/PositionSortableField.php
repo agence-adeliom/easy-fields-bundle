@@ -5,12 +5,11 @@ namespace Adeliom\EasyFieldsBundle\Admin\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use function Symfony\Component\String\s;
 
 final class PositionSortableField implements FieldInterface
 {
-    const ACTION_URL = 'actionUrl';
-    const PARENT_PROPERTY = "parentProperty";
+    public const ACTION_URL = 'actionUrl';
+    public const PARENT_PROPERTY = "parentProperty";
 
     use FieldTrait;
 
@@ -26,13 +25,13 @@ final class PositionSortableField implements FieldInterface
         return $field;
     }
 
-    public function setParentProperty($field)
+    public function setParentProperty($field): static
     {
         $this->setCustomOption(self::PARENT_PROPERTY, $field);
         return $this;
     }
 
-    public function setActionUrl($value)
+    public function setActionUrl($value): static
     {
         $this->setCustomOption(self::ACTION_URL, $value);
         return $this;

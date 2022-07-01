@@ -34,6 +34,7 @@ class CollectionTypeExtension extends AbstractTypeExtension
 
     /**
      * Return the class of the type being extended.
+     * @return array<class-string<CollectionType>>
      */
     public static function getExtendedTypes(): iterable
     {

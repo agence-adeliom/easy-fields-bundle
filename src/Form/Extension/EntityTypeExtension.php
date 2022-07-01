@@ -13,14 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * @var AdminUrlGenerator AdminUrlGenerator
-     */
-    protected $adminUrlGenerator;
-
-    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(protected AdminUrlGenerator $adminUrlGenerator)
     {
-        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     /**
@@ -45,7 +39,7 @@ class EntityTypeExtension extends AbstractTypeExtension
         ]);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $settableOptions = AssociationField::getSettableOptions();
         foreach ($settableOptions as $option) {
@@ -81,7 +75,10 @@ class EntityTypeExtension extends AbstractTypeExtension
     }
 
 
-    public static function getExtendedTypes(): iterable
+    /**
+     * @return class-string[]
+     */
+    public static function getExtendedTypes(): array
     {
         return [EntityType::class, CrudAutocompleteType::class];
     }

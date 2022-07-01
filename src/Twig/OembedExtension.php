@@ -3,6 +3,8 @@
 
 namespace Adeliom\EasyFieldsBundle\Twig;
 
+use Embed\Extractor;
+use Exception;
 use Embed\Embed;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -10,9 +12,13 @@ use Twig\TwigFunction;
 
 class OembedExtension extends AbstractExtension
 {
-    private $embed;
-    private $url;
+    private ?Extractor $embed = null;
 
+    private mixed $url;
+
+    /**
+     * @return TwigFilter[]
+     */
     public function getFilters(): array
     {
         return [
@@ -33,7 +39,7 @@ class OembedExtension extends AbstractExtension
             try {
                 $this->url = $url;
                 $this->embed = (new Embed())->get($url);
-            }catch (\Exception $e){
+            }catch (Exception){
                 return null;
             }
         }
@@ -47,7 +53,7 @@ class OembedExtension extends AbstractExtension
         return null;
     }
 
-    public function getDimensions($url){
+    public function getDimensions($url): ?array{
         if($this->getOembed($url) && $code = $this->getOembed($url)->code){
             return [
                 "width" => $code->width,

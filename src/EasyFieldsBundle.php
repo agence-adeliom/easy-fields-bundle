@@ -7,10 +7,7 @@ use Adeliom\EasyFieldsBundle\DependencyInjection\EasyFieldsExtension;
 
 class EasyFieldsBundle extends Bundle
 {
-    /**
-     * @return ExtensionInterface|null The container extension
-     */
-    public function getContainerExtension()
+    public function getContainerExtension(): EasyFieldsExtension
     {
         return new EasyFieldsExtension();
     }

@@ -64,7 +64,7 @@ final class AssociationField implements FieldInterface
             ;
     }
 
-    public static function getSettableOptions()
+    public static function getSettableOptions(): array
     {
         return [
             self::OPTION_BUTTON_ADD_LABEL,

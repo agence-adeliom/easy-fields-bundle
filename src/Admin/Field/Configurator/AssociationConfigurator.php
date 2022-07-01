@@ -3,6 +3,7 @@
 namespace Adeliom\EasyFieldsBundle\Admin\Field\Configurator;
 
 
+use Doctrine\ORM\QueryBuilder;
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\PersistentCollection;
@@ -20,15 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AssociationConfigurator implements FieldConfiguratorInterface
 {
-    private $entityFactory;
-    private $adminUrlGenerator;
-    private $translator;
-
-    public function __construct(EntityFactory $entityFactory, AdminUrlGenerator $adminUrlGenerator, TranslatorInterface $translator)
+    public function __construct(private EntityFactory $entityFactory, private AdminUrlGenerator $adminUrlGenerator, private TranslatorInterface $translator)
     {
-        $this->entityFactory = $entityFactory;
-        $this->adminUrlGenerator = $adminUrlGenerator;
-        $this->translator = $translator;
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -62,7 +56,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         if (true === $field->getCustomOption(AssociationField::OPTION_AUTOCOMPLETE)) {
             $targetCrudControllerFqcn = $field->getCustomOption(AssociationField::OPTION_CRUD_CONTROLLER);
             if (null === $targetCrudControllerFqcn) {
-                throw new \RuntimeException(sprintf('The "%s" field cannot be autocompleted because it doesn\'t define the related CRUD controller FQCN with the "setCrudController()" method.', $field->getProperty()));
+                throw new RuntimeException(sprintf('The "%s" field cannot be autocompleted because it doesn\'t define the related CRUD controller FQCN with the "setCrudController()" method.', $field->getProperty()));
             }
 
             $field->setFormType(CrudAutocompleteType::class);
@@ -80,7 +74,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
 
             $field->setFormTypeOption('attr.data-ea-autocomplete-endpoint-url', $autocompleteEndpointUrl);
         } else {
-            $field->setFormTypeOptionIfNotSet('query_builder', static function (EntityRepository $repository) use ($field) {
+            $field->setFormTypeOptionIfNotSet('query_builder', static function (EntityRepository $repository) use ($field): QueryBuilder {
                 // TODO: should this use `createIndexQueryBuilder` instead, so we get the default ordering etc.?
                 // it would then be identical to the one used in autocomplete action, but it is a bit complex getting it in here
                 $queryBuilder = $repository->createQueryBuilder('entity');

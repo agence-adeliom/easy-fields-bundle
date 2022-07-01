@@ -68,15 +68,10 @@ final class IconField implements FieldInterface
         return $this;
     }
 
-    /**
-     * @param string|array $fonts
-     * @return $this
-     */
-    public function setFonts($fonts = []): self
+    public function setFonts(string|array $fonts = []): self
     {
         $this->setFormTypeOption('fonts', $fonts);
         return $this;
     }
-
 
 }

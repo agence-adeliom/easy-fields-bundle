@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class AdminListener
 {
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
         $request = $event->getRequest();
         $response = $event->getResponse();

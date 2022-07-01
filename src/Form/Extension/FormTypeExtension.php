@@ -30,6 +30,7 @@ class FormTypeExtension extends AbstractTypeExtension
 
     /**
      * Return the class of the type being extended.
+     * @return array<class-string<FormType>>
      */
     public static function getExtendedTypes(): iterable
     {

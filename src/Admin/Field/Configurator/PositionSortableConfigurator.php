@@ -19,11 +19,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class PositionSortableConfigurator implements FieldConfiguratorInterface
 {
-    private $adminUrlGenerator;
-
-    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(private AdminUrlGenerator $adminUrlGenerator)
     {
-        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool

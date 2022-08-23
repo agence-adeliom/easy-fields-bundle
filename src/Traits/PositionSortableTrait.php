@@ -5,67 +5,101 @@ namespace Adeliom\EasyFieldsBundle\Traits;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+
 trait PositionSortableTrait
 {
-    #[Gedmo\TreeLeft]
+
+    /**
+     * @Gedmo\TreeLeft
+     */
     #[ORM\Column(name: 'lft', type: 'integer')]
-    protected int $lft;
+    protected $lft;
 
-    #[Gedmo\TreeLevel]
+    /**
+     * @Gedmo\TreeLevel
+     */
     #[ORM\Column(name: 'lvl', type: 'integer')]
-    protected int $lvl;
+    protected $lvl;
 
-    #[Gedmo\TreeRight]
+    /**
+     * @Gedmo\TreeRight
+     */
     #[ORM\Column(name: 'rgt', type: 'integer')]
-    protected int $rgt;
+    protected $rgt;
 
-    #[Gedmo\TreeRoot]
+    /**
+     * @Gedmo\TreeRoot
+     */
     #[ORM\Column(name: 'root', type: 'integer', nullable: true)]
-    protected ?int $root;
+    protected $root;
 
-    public function getLft(): int
+
+    /**
+     * @return mixed
+     */
+    public function getLft()
     {
         return $this->lft;
     }
 
-    public function setLft(int $lft): void
+    /**
+     * @param mixed $lft
+     */
+    public function setLft($lft): void
     {
         $this->lft = $lft;
     }
 
-    public function getLvl(): int
+    /**
+     * @return mixed
+     */
+    public function getLvl()
     {
         return $this->lvl;
     }
 
-    public function setLvl(int $lvl): void
+    /**
+     * @param mixed $lvl
+     */
+    public function setLvl($lvl): void
     {
         $this->lvl = $lvl;
     }
 
-    public function getRgt(): int
+    /**
+     * @return mixed
+     */
+    public function getRgt()
     {
         return $this->rgt;
     }
 
-    public function setRgt(int $rgt): void
+    /**
+     * @param mixed $rgt
+     */
+    public function setRgt($rgt): void
     {
         $this->rgt = $rgt;
     }
 
-    public function getRoot(): ?int
+    /**
+     * @return mixed
+     */
+    public function getRoot()
     {
         return $this->root;
     }
 
-    public function setRoot(?int $root): void
+    /**
+     * @param mixed $root
+     */
+    public function setRoot($root): void
     {
         $this->root = $root;
     }
 
-    public function getSortableData(mixed $name): mixed
+    public function getSortableData($name)
     {
         return $this->{$name};
     }
-
 }

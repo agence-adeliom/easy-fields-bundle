@@ -7,13 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class OembedController extends AbstractController
 {
     public function index(Request $request): Response
     {
-        if(!$url = $request->get("url")){
+        if (!$url = $request->get("url")) {
             throw new BadRequestException("The parameter 'url' is missing");
         }
 
@@ -23,7 +22,7 @@ class OembedController extends AbstractController
 
         $embed = new Embed();
         $infos = $embed->get($url);
-        if(!$infos->code){
+        if ($infos->code === null) {
             throw new BadRequestException("The URL provided has no integration code");
         }
 

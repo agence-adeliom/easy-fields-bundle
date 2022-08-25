@@ -46,25 +46,22 @@ class EntityTypeExtension extends AbstractTypeExtension
             $view->vars[$option] = $options[$option];
         }
 
-        if (isset($options[AssociationField::OPTION_ALLOW_ADD]) && $options[AssociationField::OPTION_ALLOW_ADD]) {
-            if (!empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
-                $ajaxEndpointUrl = $this->adminUrlGenerator
-                    ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
-                    ->setAction('new')
-                    ->generateUrl();
-                $view->vars['attr']['data-ea-ajax-new-endpoint-url'] = $ajaxEndpointUrl;
-            }
+        if (isset($options[AssociationField::OPTION_ALLOW_ADD]) && $options[AssociationField::OPTION_ALLOW_ADD] && !empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
+            $ajaxEndpointUrl = $this->adminUrlGenerator
+                ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
+                ->setAction('new')
+                ->generateUrl();
+            $view->vars['attr']['data-ea-ajax-new-endpoint-url'] = $ajaxEndpointUrl;
         }
+
         //dump($options[AssociationField::OPTION_LIST_SELECTOR]); exit;
 
-        if (isset($options[AssociationField::OPTION_LIST_SELECTOR]) && $options[AssociationField::OPTION_LIST_SELECTOR]) {
-            if (!empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
-                $ajaxEndpointUrl = $this->adminUrlGenerator
-                    ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
-                    ->setAction('index')
-                    ->generateUrl();
-                $view->vars['attr']['data-ea-ajax-index-url'] = $ajaxEndpointUrl;
-            }
+        if (isset($options[AssociationField::OPTION_LIST_SELECTOR]) && $options[AssociationField::OPTION_LIST_SELECTOR] && !empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
+            $ajaxEndpointUrl = $this->adminUrlGenerator
+                ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
+                ->setAction('index')
+                ->generateUrl();
+            $view->vars['attr']['data-ea-ajax-index-url'] = $ajaxEndpointUrl;
         }
 
         /*if(isset($view->vars['attr']["data-ea-widget"]) && $view->vars['attr']["data-ea-widget"] == "ea-autocomplete"){

@@ -2,7 +2,6 @@
 
 namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
-
 use Adeliom\EasyCommonBundle\Helper\Enum;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
@@ -13,14 +12,49 @@ final class EnumField implements FieldInterface
 {
     use FieldTrait;
 
+    /**
+     * @var string
+     */
     public const OPTION_ENUM = 'enum';
+
+    /**
+     * @var string
+     */
     public const OPTION_RENDER_AS_BADGES = 'renderAsBadges';
+
+    /**
+     * @var string
+     */
     public const OPTION_RENDER_EXPANDED = 'renderExpanded';
+
+    /**
+     * @var string
+     */
     public const OPTION_ALLOW_MULTIPLE_CHOICES = 'allowMultipleChoices';
+
+    /**
+     * @var string
+     */
     public const OPTION_WIDGET = 'widget';
+
+    /**
+     * @var string
+     */
     public const OPTION_ESCAPE_HTML_CONTENTS = 'escapeHtml';
+
+    /**
+     * @var string[]
+     */
     public const VALID_BADGE_TYPES = ['success', 'warning', 'danger', 'info', 'primary', 'secondary', 'light', 'dark'];
+
+    /**
+     * @var string
+     */
     public const WIDGET_AUTOCOMPLETE = 'autocomplete';
+
+    /**
+     * @var string
+     */
     public const WIDGET_NATIVE = 'native';
 
     /**
@@ -52,7 +86,8 @@ final class EnumField implements FieldInterface
         if (!class_exists($enumFcqn) || !is_a($enumFcqn, Enum::class, true)) {
             throw new InvalidConfigurationException(sprintf(
                 'Enum class must be a valid class extending %s. "%s" given.',
-                Enum::class, $enumFcqn
+                Enum::class,
+                $enumFcqn
             ));
         }
 

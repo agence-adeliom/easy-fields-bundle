@@ -1,4 +1,5 @@
 import Sortable from 'sortablejs';
+
 window.$ = window.jQuery = require('jquery');
 
 

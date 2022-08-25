@@ -9,16 +9,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use function Symfony\Component\String\u;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function Symfony\Component\String\u;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -35,6 +40,7 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
         if (empty($choices)) {
             throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its possible choices using the setChoices() method.', $field->getProperty()));
         }
+
         if (empty($map)) {
             throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its fields map using the setMap() method.', $field->getProperty()));
         }
@@ -73,6 +79,7 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
                     : $choiceValue;
             }
         }
+
         $field->setFormattedValue(implode($isRenderedAsBadge ? '' : ', ', $selectedChoices));
     }
 
@@ -119,6 +126,6 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
 
         $badgeTypeCssClass = empty($badgeType) ? '' : u($badgeType)->ensureStart('badge-')->toString();
 
-        return $commonBadgeCssClass.' '.$badgeTypeCssClass;
+        return $commonBadgeCssClass . ' ' . $badgeTypeCssClass;
     }
 }

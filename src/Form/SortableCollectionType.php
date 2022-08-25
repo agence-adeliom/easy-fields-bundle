@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortableCollectionType extends CollectionType
 {
-
     /**
      * {@inheritdoc}
      */
@@ -22,7 +21,7 @@ class SortableCollectionType extends CollectionType
         if ($options['allow_add'] && $options['prototype']) {
             $prototypeOptions = array_replace([
                 'required' => $options['required'],
-                'label' => $options['prototype_name'].'label__',
+                'label' => $options['prototype_name'] . 'label__',
             ], $options['entry_options']);
 
             if (null !== $options['prototype_data']) {
@@ -101,9 +100,8 @@ class SortableCollectionType extends CollectionType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $entryOptionsNormalizer = function (Options $options, $value) {
+        $entryOptionsNormalizer = static function (Options $options, $value) {
             $value['block_name'] = 'entry';
-
             return $value;
         };
 
@@ -118,7 +116,7 @@ class SortableCollectionType extends CollectionType
             'entry_type' => TextType::class,
             'entry_options' => [],
             'delete_empty' => false,
-            'invalid_message' => fn(Options $options, $previousValue) => ($options['legacy_error_messages'] ?? true)
+            'invalid_message' => static fn(Options $options, $previousValue) => ($options['legacy_error_messages'] ?? true)
                 ? $previousValue
                 : 'The collection is invalid.',
         ]);
@@ -126,7 +124,6 @@ class SortableCollectionType extends CollectionType
         $resolver->setNormalizer('entry_options', $entryOptionsNormalizer);
         $resolver->setAllowedTypes('delete_empty', ['bool', 'callable']);
         $resolver->setAllowedTypes('allow_drag', 'bool');
-
     }
 
     /**
@@ -136,5 +133,4 @@ class SortableCollectionType extends CollectionType
     {
         return 'sortable_collection';
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
-
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -11,36 +10,91 @@ final class AssociationField implements FieldInterface
 {
     use FieldTrait;
 
+    /**
+     * @var string
+     */
     public const OPTION_AUTOCOMPLETE = 'autocomplete';
+
+    /**
+     * @var string
+     */
     public const OPTION_CRUD_CONTROLLER = 'crudControllerFqcn';
+
+    /**
+     * @var string
+     */
     public const OPTION_QUERY_BUILDER_CALLABLE = 'queryBuilderCallable';
 
-    /** @internal this option is intended for internal use only */
+    /** @internal this option is intended for internal use only
+     * @var string */
     public const OPTION_RELATED_URL = 'relatedUrl';
 
-    /** @internal this option is intended for internal use only */
+    /** @internal this option is intended for internal use only
+     * @var string */
     public const OPTION_DOCTRINE_ASSOCIATION_TYPE = 'associationType';
 
+    /**
+     * @var string
+     */
     public const OPTION_ALLOW_ADD = 'allow_add';
 
+    /**
+     * @var string
+     */
     public const OPTION_BUTTON_ADD_LABEL = 'button_add_label';
+
+    /**
+     * @var string
+     */
     public const OPTION_BUTTON_ADD_ICON = 'button_add_icon';
 
+    /**
+     * @var string
+     */
     public const OPTION_LIST_SELECTOR = 'list_selector';
 
+    /**
+     * @var string
+     */
     public const OPTION_LIST_BUTTON_LABEL = 'list_button_label';
+
+    /**
+     * @var string
+     */
     public const OPTION_LIST_BUTTON_ICON = 'list_button_icon';
+
+    /**
+     * @var string
+     */
     public const OPTION_LIST_BUTTON_CANCEL_LABEL = 'list_button_cancel_label';
+
+    /**
+     * @var string
+     */
     public const OPTION_LIST_BUTTON_VALIDATE_LABEL = 'list_button_validate_label';
 
+    /**
+     * @var string
+     */
     public const OPTION_LIST_SHOW_FILTER = 'list_show_filter';
+
+    /**
+     * @var string
+     */
     public const OPTION_LIST_SHOW_SEARCH = 'list_show_search';
 
+    /**
+     * @var string
+     */
     public const OPTION_LIST_DISPLAY_COLUMNS = 'list_display_columns';
 
+    /**
+     * @var string
+     */
     public const OPTION_LIST_FILTERS = 'list_filters';
 
-    /** @internal this option is intended for internal use only */
+    /** @internal this option is intended for internal use only
+     * @var string */
     public const PARAM_AUTOCOMPLETE_CONTEXT = 'autocompleteContext';
 
     public static function new(string $propertyName, ?string $label = null): self

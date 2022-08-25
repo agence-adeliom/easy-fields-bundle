@@ -48,7 +48,7 @@ class IconType extends AbstractType
         $view->vars['no_result_found'] = $options['no_result_found'];
         $view->vars['border_radius'] = $options['border_radius'];
         $view->vars['fonts'] = null;
-        if(!empty($options['fonts'])){
+        if (!empty($options['fonts'])) {
             $view->vars['fonts'] = is_string($options['fonts']) ? [$options['fonts']] : $options['fonts'];
         }
     }

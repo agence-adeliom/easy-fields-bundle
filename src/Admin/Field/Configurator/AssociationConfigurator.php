@@ -2,11 +2,10 @@
 
 namespace Adeliom\EasyFieldsBundle\Admin\Field\Configurator;
 
-
-use Doctrine\ORM\QueryBuilder;
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\TextAlign;
@@ -21,8 +20,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AssociationConfigurator implements FieldConfiguratorInterface
 {
-    public function __construct(private EntityFactory $entityFactory, private AdminUrlGenerator $adminUrlGenerator, private TranslatorInterface $translator)
-    {
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private EntityFactory $entityFactory,
+        /**
+         * @readonly
+         */
+        private AdminUrlGenerator $adminUrlGenerator,
+        /**
+         * @readonly
+         */
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -103,7 +114,9 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
 
             $field->setFormTypeOption('attr.data-ea-ajax-index-url', $ajaxIndexEndpointUrl);
         }
-        $settableOptions = $settableOptions = AssociationField::getSettableOptions();
+
+        $settableOptions = AssociationField::getSettableOptions();
+        $settableOptions = $settableOptions;
 
         foreach ($settableOptions as $option) {
             $val = $field->getCustomOptions()->get($option);

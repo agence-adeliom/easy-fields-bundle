@@ -9,16 +9,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use function Symfony\Component\String\u;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function Symfony\Component\String\u;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 final class EnumConfigurator implements FieldConfiguratorInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -71,6 +76,7 @@ final class EnumConfigurator implements FieldConfiguratorInterface
                     : $choiceValue;
             }
         }
+
         $field->setFormattedValue(implode($isRenderedAsBadge ? '' : ', ', $selectedChoices));
     }
 
@@ -82,8 +88,8 @@ final class EnumConfigurator implements FieldConfiguratorInterface
 
         $choicesEnum = $enum::toArray();
         $choices = [];
-        foreach ($choicesEnum as $k => $v){
-            $choices[sprintf("easy.enum.%s.%s", $field->getProperty() , $v)] = $v;
+        foreach ($choicesEnum as $k => $v) {
+            $choices[sprintf("easy.enum.%s.%s", $field->getProperty(), $v)] = $v;
         }
 
         return $choices;
@@ -106,6 +112,6 @@ final class EnumConfigurator implements FieldConfiguratorInterface
 
         $badgeTypeCssClass = empty($badgeType) ? '' : u($badgeType)->ensureStart('badge-')->toString();
 
-        return $commonBadgeCssClass.' '.$badgeTypeCssClass;
+        return $commonBadgeCssClass . ' ' . $badgeTypeCssClass;
     }
 }

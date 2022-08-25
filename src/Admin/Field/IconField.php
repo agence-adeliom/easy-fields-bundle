@@ -4,10 +4,8 @@ namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Adeliom\EasyFieldsBundle\Form\IconType;
-use Adeliom\EasyFieldsBundle\Form\OembedType;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 
 final class IconField implements FieldInterface
 {
@@ -68,10 +66,12 @@ final class IconField implements FieldInterface
         return $this;
     }
 
+    /**
+     * @param string|mixed[] $fonts
+     */
     public function setFonts(string|array $fonts = []): self
     {
         $this->setFormTypeOption('fonts', $fonts);
         return $this;
     }
-
 }

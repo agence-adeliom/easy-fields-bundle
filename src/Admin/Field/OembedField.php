@@ -6,7 +6,6 @@ use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Adeliom\EasyFieldsBundle\Form\OembedType;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 
 final class OembedField implements FieldInterface
 {

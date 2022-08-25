@@ -5,33 +5,23 @@ namespace Adeliom\EasyFieldsBundle\Traits;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-
 trait PositionSortableTrait
 {
+    #[ORM\Column(name: 'lft', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[Gedmo\TreeLeft]
+    protected ?int $lft = null;
 
-    /**
-     * @Gedmo\TreeLeft
-     */
-    #[ORM\Column(name: 'lft', type: 'integer')]
-    protected $lft;
+    #[ORM\Column(name: 'lvl', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[Gedmo\TreeLevel]
+    protected ?int $lvl = null;
 
-    /**
-     * @Gedmo\TreeLevel
-     */
-    #[ORM\Column(name: 'lvl', type: 'integer')]
-    protected $lvl;
+    #[ORM\Column(name: 'rgt', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[Gedmo\TreeRight]
+    protected ?int $rgt = null;
 
-    /**
-     * @Gedmo\TreeRight
-     */
-    #[ORM\Column(name: 'rgt', type: 'integer')]
-    protected $rgt;
-
-    /**
-     * @Gedmo\TreeRoot
-     */
-    #[ORM\Column(name: 'root', type: 'integer', nullable: true)]
-    protected $root;
+    #[ORM\Column(name: 'root', type: \Doctrine\DBAL\Types\Types::INTEGER, nullable: true)]
+    #[Gedmo\TreeRoot]
+    protected ?int $root = null;
 
 
     /**
@@ -42,10 +32,7 @@ trait PositionSortableTrait
         return $this->lft;
     }
 
-    /**
-     * @param mixed $lft
-     */
-    public function setLft($lft): void
+    public function setLft(mixed $lft): void
     {
         $this->lft = $lft;
     }
@@ -58,10 +45,7 @@ trait PositionSortableTrait
         return $this->lvl;
     }
 
-    /**
-     * @param mixed $lvl
-     */
-    public function setLvl($lvl): void
+    public function setLvl(mixed $lvl): void
     {
         $this->lvl = $lvl;
     }
@@ -74,10 +58,7 @@ trait PositionSortableTrait
         return $this->rgt;
     }
 
-    /**
-     * @param mixed $rgt
-     */
-    public function setRgt($rgt): void
+    public function setRgt(mixed $rgt): void
     {
         $this->rgt = $rgt;
     }
@@ -90,10 +71,7 @@ trait PositionSortableTrait
         return $this->root;
     }
 
-    /**
-     * @param mixed $root
-     */
-    public function setRoot($root): void
+    public function setRoot(mixed $root): void
     {
         $this->root = $root;
     }

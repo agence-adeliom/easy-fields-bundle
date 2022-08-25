@@ -1,0 +1,55 @@
+{% block oembed_widget %}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
+
+    <div id="{{ form.vars.id }}_result">
+        {% if form.vars.value %}
+            {% include '@EasyFields/crud/field/oembed.html.twig' with {"url": form.vars.value} %}
+        {% endif %}
+    </div>
+
+    <script>
+        var timer_{{ form.vars.id }} = null;
+        document.getElementById("{{ form.vars.id }}").addEventListener("keyup", function (e){
+            var delay = 400;
+            var url = this.value;
+            clearTimeout(timer_{{ form.vars.id }});
+            timer_{{ form.vars.id }} = setTimeout(function () {
+                let opts = {
+                    "url": url
+                }
+                fetch('{{ path('easy_field.get_oembed') }}',{
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(opts)
+                }).then(function(response) {
+                    if (response.status >= 400 && response.status < 600) {
+                        throw new Error("Bad response from server");
+                    }
+                    return response.text();
+                }).then(function(html) {
+                    var setInnerHTML = function(elm, html) {
+                        console.log(elm, html)
+                        elm.innerHTML = html;
+                        Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
+                            const newScript = document.createElement("script");
+                            Array.from(oldScript.attributes)
+                                .forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+                            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                            oldScript.parentNode.replaceChild(newScript, oldScript);
+                        });
+                    }
+                    setInnerHTML(document.getElementById("{{ form.vars.id }}_result"), html)
+                }).catch(function (err) {
+                    document.getElementById("{{ form.vars.id }}_result").innerHTML = null;
+                    console.warn('Something went wrong.', err);
+                });
+            }, delay);
+        })
+    </script>
+
+
+{% endblock %}

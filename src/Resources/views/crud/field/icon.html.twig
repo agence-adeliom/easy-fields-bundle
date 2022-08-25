@@ -1,0 +1,39 @@
+
+{% if field.value is defined and field.value is not null %}
+    {% set url = field.value %}
+{% endif %}
+
+{% if url is defined and url is not null %}
+    {% set code = url|oembed_html %}
+{% endif %}
+
+{% if code is defined and code is not null %}
+    {% set dimensions = url|oembed_size %}
+    <div class="oembed-holder">
+        <div class="oembed-responsive" style="padding-bottom: {{ dimensions.ratio ? dimensions.ratio ~ "%" : "0" }}; min-width: {{ dimensions.width ? dimensions.width ~ "px" : "auto" }}">
+            {{ code|raw }}
+        </div>
+    </div>
+
+    <style>
+        .oembed-holder{
+            margin-top: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            display: inline-block;
+            max-width: 40rem;
+            width: 100%;
+        }
+        .oembed-responsive{
+            position: relative;
+        }
+        .oembed-responsive iframe{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+{% endif %}

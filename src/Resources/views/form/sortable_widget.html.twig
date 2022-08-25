@@ -1,0 +1,122 @@
+{% block sortable_collection_row %}
+    {% if prototype is defined and not prototype.rendered %}
+        {% set row_attr = row_attr|merge({ 'data-prototype': form_row(prototype) }) %}
+    {% endif %}
+
+    {% set row_attr = row_attr|merge({
+        'data-ea-collection-field': 'true',
+        'data-entry-is-complex': form.vars.ea_crud_form.ea_field and form.vars.ea_crud_form.ea_field.customOptions.get('entryIsComplex') ? 'true' : 'false',
+        'data-allow-add': allow_add ? 'true' : 'false',
+        'data-allow-delete': allow_delete ? 'true' : 'false',
+        'data-num-items': form.children|length,
+        'data-form-type-name-placeholder': prototype is defined ? prototype.vars.name : '',
+        'data-form-type-id': id,
+        'data-form-type-parent-id': form.parent is defined ? form.parent.vars.id : '',
+        'data-form-type-parent-name': form.parent is defined ? form.parent.vars.name : '',
+    }) %}
+
+    {{ block('form_row') }}
+{% endblock sortable_collection_row %}
+
+{% block sortable_collection_widget %}
+    {# the "is iterable" check is needed because if an object implements __toString() and
+               returns an empty string, "is empty" returns true even if it's not a collection #}
+    {% set isEmptyCollection = value is null or (value is iterable and value is empty) %}
+    {% set is_array_field = 'EasyCorp\\Bundle\\EasyAdminBundle\\Field\\ArrayField' == form.vars.ea_crud_form.ea_field.fieldFqcn ?? false %}
+
+    <div class="ea-form-collection-items">
+        {% if isEmptyCollection %}
+            {{ block('empty_collection') }}
+        {% elseif is_array_field %}
+            {{ block('form_widget') }}
+        {% else %}
+            <div class="accordion border-0 shadow-none">
+                {{ block('form_widget') }}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if isEmptyCollection or form.vars.prototype is defined %}
+        {% set attr = attr|merge({'data-empty-collection': block('empty_collection') }) %}
+    {% endif %}
+
+    {% if allow_add|default(false) %}
+        <button type="button" class="btn btn-link field-sortable_collection-add-button">
+            <i class="fa fa-plus pr-1"></i>
+            {{ 'action.add_new_item'|trans({}, 'EasyAdminBundle') }}
+        </button>
+    {% endif %}
+{% endblock sortable_collection_widget %}
+
+{% block sortable_collection_entry_row %}
+    <div class="sortable-collection_row">
+        {{ block('form_row') }}
+    </div>
+{% endblock sortable_collection_entry_row %}
+
+
+{% block sortable_collection_entry_widget %}
+    {% set is_array_field = 'EasyCorp\\Bundle\\EasyAdminBundle\\Field\\ArrayField' == form_parent(form).vars.ea_crud_form.ea_field.fieldFqcn ?? false %}
+    {% set is_complex = form_parent(form).vars.ea_crud_form.ea_field.customOptions.get('entryIsComplex') ?? false %}
+    {% set allows_deleting_items = form_parent(form).vars.allow_delete|default(false) %}
+    {% set allows_drag_items = form_parent(form).vars.allow_drag|default(false) %}
+    {% set render_expanded = form_parent(form).vars.ea_crud_form.ea_field.customOptions.get('renderExpanded') ?? false %}
+    {% set hide_title = form_parent(form).vars.hide_title ?? false %}
+    {% set error = false %}
+
+    {% if form.vars.errors.form.getErrors(true)|length %}
+        {% set render_expanded = true %}
+        {% set error = true %}
+    {% endif %}
+
+    {% set delete_item_button %}
+        <button type="button" class="btn btn-link btn-link-danger field-sortable_collection-delete-button" style="position: static"
+                title="{{ 'action.remove_item'|trans({}, 'EasyAdminBundle') }}">
+            <i class="far fa-trash-alt"></i>
+        </button>
+    {% endset %}
+
+    {% set drag_item_button %}
+        <button type="button" class="btn btn-link btn-link-secondary field-sortable_collection-drag-button" style="cursor:move;"
+                title="{{ 'action.drag_item'|trans({}, 'EasyAdminBundle') }}">
+            <i class="fas fa-arrows-alt-v"></i>
+        </button>
+    {% endset %}
+
+
+    <div class="field-sortable_collection-item {{ is_complex ? 'field-sortable_collection-item-complex' }} bg-white border rounded mb-1 {{ error ? "border-danger"}} " >
+        {% if is_array_field|default(false) %}
+            {{ form_widget(form) }}
+            {% if allows_deleting_items %}
+                {{ delete_item_button }}
+            {% endif %}
+            {% if allows_drag_items %}
+                {{ drag_item_button }}
+            {% endif %}
+        {% else %}
+            <div class="accordion-item" style="border-radius: 0; box-shadow: none">
+                <h2 class="accordion-header d-flex p-0 rounded-none" style="--border-radius: 0; box-shadow: none">
+                    <button class="accordion-button {{ render_expanded ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}-contents">
+                        <i class="fas fw fa-chevron-right form-collection-item-collapse-marker"></i>
+                        {% if not hide_title %}
+                            <span>{{ value|ea_as_string }}</span>
+                        {% endif %}
+                    </button>
+                    <div class="accordion-actions d-flex">
+                        {% if allows_deleting_items %}
+                            {{ delete_item_button }}
+                        {% endif %}
+                        {% if allows_drag_items %}
+                            {{ drag_item_button }}
+                        {% endif %}
+                    </div>
+                </h2>
+                <div id="{{ id }}-contents" class="accordion-collapse collapse {{ render_expanded ? 'show' }} border-top">
+                    <div class="accordion-body">
+                        {{ form_widget(form) }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock sortable_collection_entry_widget %}

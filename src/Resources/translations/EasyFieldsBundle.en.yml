@@ -1,0 +1,6 @@
+action:
+  add_new_item: "Add new item"
+  list_items: "Browse items"
+  list:
+    cancel: "Cancel"
+    validate: "Validate"

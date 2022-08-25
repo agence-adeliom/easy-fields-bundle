@@ -1,0 +1,78 @@
+{% use '@!EasyAdmin/crud/form_theme.html.twig' %}
+
+{% block choice_field_mask_widget %}
+    {{ block('choice_widget') }}
+
+    {% set main_form_name = id|slice(0, id|length - name|length) %}
+
+    <script>
+        var allFields_{{ main_form_name }} = {{ all_fields|json_encode|raw }};
+        var map_{{ main_form_name }} = {{ map|json_encode|raw }};
+
+        function choice_field_mask_show_{{ main_form_name }}(val)
+        {
+            var controlGroupIdFunc = function (field) {
+                let rowId = '{{ main_form_name }}_';
+                if(rowId.endsWith('__')){
+                    rowId = rowId.replace('__', '_');
+                }
+                return '[data-row-id=' + rowId + field + "]";
+            };
+
+            if (map_{{ main_form_name }}[val] == undefined) {
+                allFields_{{ main_form_name }}.forEach(function (field) {
+                    document.querySelectorAll(controlGroupIdFunc(field)).forEach(function (elm){
+                        elm.style.display = 'none';
+                    });
+                });
+                return;
+            }
+            allFields_{{ main_form_name }}.forEach(function (field) {
+                document.querySelectorAll(controlGroupIdFunc(field)).forEach(function (elm){
+                    elm.style.display = 'none';
+                    elm.querySelectorAll('[required="required"]').forEach(function (e){
+                        e.setAttribute("data-required", "required");
+                        e.removeAttribute("required");
+                    })
+                });
+            });
+            map_{{ main_form_name }}[val].forEach(function (field) {
+                document.querySelectorAll(controlGroupIdFunc(field)).forEach(function (elm){
+                    elm.style.display = '';
+                    elm.querySelectorAll('[data-required="required"]').forEach(function (e){
+                        e.setAttribute("required", "required");
+                    })
+                });
+            });
+        }
+
+        showMaskChoiceEl_{{ main_form_name }} = document.querySelector('#{{ id }}');
+        showMaskChoiceEl_{{ main_form_name }}.addEventListener('change', function (event) {
+            choice_field_mask_show_{{ main_form_name }}(event.target.value);
+        });
+        choice_field_mask_show_{{ main_form_name }}(showMaskChoiceEl_{{ main_form_name }}.value);
+
+        window.addEventListener('DOMContentLoaded', function() {
+            showMaskChoiceEl_{{ main_form_name }} = document.querySelector('#{{ id }}');
+            showMaskChoiceEl_{{ main_form_name }}.addEventListener('change', function (event) {
+                choice_field_mask_show_{{ main_form_name }}(event.target.value);
+            });
+            choice_field_mask_show_{{ main_form_name }}(showMaskChoiceEl_{{ main_form_name }}.value);
+        });
+
+        document.addEventListener('ea.collection.item-added', function () {
+            showMaskChoiceEl_{{ main_form_name }} = document.querySelector('#{{ id }}');
+            showMaskChoiceEl_{{ main_form_name }}.addEventListener('change', function (event) {
+                choice_field_mask_show_{{ main_form_name }}(event.target.value);
+            });
+            choice_field_mask_show_{{ main_form_name }}(showMaskChoiceEl_{{ main_form_name }}.value)
+        });
+    </script>
+{% endblock choice_field_mask_widget %}
+
+{% block form_row %}
+    {% set row_attr = row_attr|merge({
+        'data-row-id': id
+    }) %}
+    {{- parent() -}}
+{% endblock form_row %}

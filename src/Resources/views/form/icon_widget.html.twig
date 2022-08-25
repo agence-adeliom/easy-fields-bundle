@@ -1,0 +1,71 @@
+{% block icon_row %}
+    {% set row_attr = row_attr|merge({
+        class: row_attr.class|default('') ~ ' form-group'
+    }) %}
+
+    <div class="{{ form.vars.ea_crud_form.ea_field.columns ?? form.vars.ea_crud_form.ea_field.defaultColumns ?? '' }}">
+        <div {% with { attr: row_attr|merge({
+            'data-row-id': id
+        }) } %}{{ block('attributes') }}{% endwith %}>
+            {{- form_label(form) -}}
+            <div class="w-field-icon">
+            {{ form_widget(form) }}
+            </div>
+            <div id="{{ form.vars.id }}_result">
+                <div class="get-and-preview">
+                    <div class="preview-icon">
+                        <i class="{{ value ?: "" }}"></i>
+                    </div>
+                    <span class="open-icons-list">
+                <button type="button" id="{{ form.vars.id }}_picker" class="btn btn-primary" data-iconpicker-input="input#{{ form.vars.id }}" data-iconpicker-preview="#{{ form.vars.id }}_result .preview-icon > i">{{ form.vars.select_button }}</button>
+            </span>
+                </div>
+            </div>
+            {{- form_help(form) -}}
+            {{ form_errors(form) }}
+            <link rel="stylesheet" href="{{ asset('bundles/easyfields/iconpicker/iconpicker-1.5.0.css') }}">
+            <script src="{{ asset('bundles/easyfields/iconpicker/iconpicker-1.5.0.js') }}"></script>
+            {% if form.vars.fonts %}
+                {% for font in form.vars.fonts %}
+                    <link rel="stylesheet" href="{{ font }}">
+                {% endfor %}
+            {% endif %}
+            <script>
+                IconPicker.Init({
+                    jsonUrl: "{{ form.vars.json_url }}",
+                    searchPlaceholder: "{{ form.vars.search_placeholder }}",
+                    showAllButton:"{{ form.vars.show_all_button }}",
+                    cancelButton: "{{ form.vars.cancel_button }}",
+                    noResultsFound: "{{ form.vars.no_result_found }}", // v1.5.0 and the next versions
+                    borderRadius: "{{ form.vars.border_radius }}", // v1.5.0 and the next versions
+                });
+                IconPicker.Run('#{{ form.vars.id }}_picker', function(){
+                    //console.log('Icon Picker');
+                });
+            </script>
+            <style>
+                .get-and-preview {
+                    display: flex;
+                    gap: 1rem;
+                }
+                .field-easy-field-iconpicker input[type="text"], .w-field-icon input[type="text"] {
+                    display:none;
+                }
+                .get-and-preview .preview-icon {
+                    border: var(--border-width) var(--border-style) var(--border-color);
+                    width: 4rem;
+                    height: 4rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: var(--border-radius);
+                    font-size: 2rem;
+                }
+                .get-and-preview .open-icons-list {
+                    display: flex;
+                    align-items: center;
+                }
+            </style>
+        </div>
+    </div>
+{% endblock %}

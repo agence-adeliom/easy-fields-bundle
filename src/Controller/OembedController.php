@@ -12,9 +12,21 @@ class OembedController extends AbstractController
 {
     public function index(Request $request): Response
     {
-        if (!$url = $request->get("url")) {
+        $url = $request->get("url");
+
+        if(!$url){
+            try {
+                $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+                $url = $content['url'] ?? null;
+            }catch (\Exception){
+                $url = null;
+            }
+        }
+
+        if (!$url){
             throw new BadRequestException("The parameter 'url' is missing");
         }
+
 
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             throw new BadRequestException("The parameter 'url' is invalid");

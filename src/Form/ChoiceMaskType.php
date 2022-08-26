@@ -16,13 +16,12 @@ class ChoiceMaskType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-
         $sanitizedMap = [];
         $allFieldNames = [];
         foreach ($options['map'] as $value => $fieldNames) {
             if (is_iterable($fieldNames)) {
                 foreach ($fieldNames as $fieldName) {
-                    $sanitizedFieldName = str_replace(['__', '.'], ['____', '__'], $fieldName);
+                    $sanitizedFieldName = str_replace(['__', '.'], ['____', '__'], (string) $fieldName);
                     $sanitizedMap[$value][] = $sanitizedFieldName;
                     $allFieldNames[] = $sanitizedFieldName;
                 }
@@ -46,7 +45,7 @@ class ChoiceMaskType extends AbstractType
     /**
      * @phpstan-return class-string<FormTypeInterface>
      */
-    public function getParent(): ?string
+    public function getParent(): string
     {
         return ChoiceType::class;
     }

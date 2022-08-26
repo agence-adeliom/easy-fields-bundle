@@ -9,7 +9,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+
 use function Symfony\Component\String\u;
+
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -17,11 +19,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
 {
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -38,6 +41,7 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
         if (empty($choices)) {
             throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its possible choices using the setChoices() method.', $field->getProperty()));
         }
+
         if (empty($map)) {
             throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its fields map using the setMap() method.', $field->getProperty()));
         }
@@ -45,7 +49,6 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
         $field->setFormTypeOptionIfNotSet('choices', $choices);
         $field->setFormTypeOptionIfNotSet('map', $map);
         $field->setFormTypeOptionIfNotSet('expanded', $isExpanded);
-
 
         $field->setCustomOption(ChoiceMaskField::OPTION_WIDGET, ChoiceMaskField::WIDGET_NATIVE);
 
@@ -76,6 +79,7 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
                     : $choiceValue;
             }
         }
+
         $field->setFormattedValue(implode($isRenderedAsBadge ? '' : ', ', $selectedChoices));
     }
 

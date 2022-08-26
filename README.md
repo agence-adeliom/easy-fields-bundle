@@ -6,7 +6,31 @@
 
 Provide some fields for Easyadmin.
 
-## Installation
+## Versions
+
+| Repository Branch | Version | Symfony Compatibility | PHP Compatibility | Status                     |
+|-------------------|---------|-----------------------|-------------------|----------------------------|
+| `2.x`             | `2.x`   | `5.4`, and `6.x`      | `8.0.2` or higher | New features and bug fixes |
+| `1.x`             | `1.x`   | `4.4`, and `5.x`      | `7.2.5` or higher | No longer maintained       |
+
+## Installation with Symfony Flex
+
+Add our recipes endpoint
+
+```json
+{
+  "extra": {
+    "symfony": {
+      "endpoint": [
+        "https://api.github.com/repos/agence-adeliom/symfony-recipes/contents/index.json?ref=flex/main",
+        ...
+        "flex://defaults"
+      ],
+      "allow-contrib": true
+    }
+  }
+}
+```
 
 Install with composer
 

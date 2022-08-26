@@ -16,13 +16,13 @@ class IconType extends AbstractType
         // this defines the available options and their default values when
         // they are not configured explicitly when using the form type
         $resolver->setDefaults([
-            'json_url' => "https://cdn.cbd.int/@furcan/iconpicker@1.5.0/dist/iconpicker-1.5.0.json",
-            'search_placeholder' => "Search Icon",
-            'select_button' => "Select Icon",
-            'show_all_button' => "Show All",
-            'cancel_button' => "Cancel",
-            'no_result_found' => "No results found.",
-            'border_radius' => "5px",
+            'json_url' => 'https://cdn.cbd.int/@furcan/iconpicker@1.5.0/dist/iconpicker-1.5.0.json',
+            'search_placeholder' => 'Search Icon',
+            'select_button' => 'Select Icon',
+            'show_all_button' => 'Show All',
+            'cancel_button' => 'Cancel',
+            'no_result_found' => 'No results found.',
+            'border_radius' => '5px',
             'fonts' => null,
         ]);
 
@@ -48,7 +48,7 @@ class IconType extends AbstractType
         $view->vars['no_result_found'] = $options['no_result_found'];
         $view->vars['border_radius'] = $options['border_radius'];
         $view->vars['fonts'] = null;
-        if(!empty($options['fonts'])){
+        if (!empty($options['fonts'])) {
             $view->vars['fonts'] = is_string($options['fonts']) ? [$options['fonts']] : $options['fonts'];
         }
     }

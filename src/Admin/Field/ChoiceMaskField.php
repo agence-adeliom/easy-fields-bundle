@@ -2,27 +2,57 @@
 
 namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
-
 use Adeliom\EasyFieldsBundle\Form\ChoiceMaskType;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class ChoiceMaskField implements FieldInterface
 {
     use FieldTrait;
 
+    /**
+     * @var string
+     */
     public const OPTION_CHOICES = 'choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_MAP = 'map';
+
+    /**
+     * @var string
+     */
     public const OPTION_RENDER_AS_BADGES = 'renderAsBadges';
+
+    /**
+     * @var string
+     */
     public const OPTION_RENDER_EXPANDED = 'renderExpanded';
+
+    /**
+     * @var string
+     */
     public const OPTION_WIDGET = 'widget';
+
+    /**
+     * @var string
+     */
     public const OPTION_ESCAPE_HTML_CONTENTS = 'escapeHtml';
 
+    /**
+     * @var string[]
+     */
     public const VALID_BADGE_TYPES = ['success', 'warning', 'danger', 'info', 'primary', 'secondary', 'light', 'dark'];
 
+    /**
+     * @var string
+     */
     public const WIDGET_AUTOCOMPLETE = 'autocomplete';
+
+    /**
+     * @var string
+     */
     public const WIDGET_NATIVE = 'native';
 
     /**

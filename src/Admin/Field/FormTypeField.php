@@ -2,8 +2,6 @@
 
 namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
-
-use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,6 +16,6 @@ final class FormTypeField implements FieldInterface
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setFormType($formType)
-            ;
+        ;
     }
 }

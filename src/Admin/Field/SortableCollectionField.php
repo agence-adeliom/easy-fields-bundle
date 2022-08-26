@@ -4,7 +4,6 @@ namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
 use Adeliom\EasyFieldsBundle\Form\SortableCollectionType;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -15,12 +14,39 @@ final class SortableCollectionField implements FieldInterface
 {
     use FieldTrait;
 
+    /**
+     * @var string
+     */
     public const OPTION_ALLOW_DRAG = 'allowDrag';
+
+    /**
+     * @var string
+     */
     public const OPTION_ALLOW_ADD = 'allowAdd';
+
+    /**
+     * @var string
+     */
     public const OPTION_ALLOW_DELETE = 'allowDelete';
+
+    /**
+     * @var string
+     */
     public const OPTION_ENTRY_IS_COMPLEX = 'entryIsComplex';
+
+    /**
+     * @var string
+     */
     public const OPTION_ENTRY_TYPE = 'entryType';
+
+    /**
+     * @var string
+     */
     public const OPTION_SHOW_ENTRY_LABEL = 'showEntryLabel';
+
+    /**
+     * @var string
+     */
     public const OPTION_RENDER_EXPANDED = 'renderExpanded';
 
     /**
@@ -28,7 +54,7 @@ final class SortableCollectionField implements FieldInterface
      */
     public static function new(string $propertyName, $label = null): self
     {
-        $field = (new self())
+        return (new self())
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setTemplatePath('@EasyFields/crud/field/sortable_collection.html.twig')
@@ -43,8 +69,6 @@ final class SortableCollectionField implements FieldInterface
             ->setCustomOption(self::OPTION_ENTRY_TYPE, TextType::class)
             ->setCustomOption(self::OPTION_SHOW_ENTRY_LABEL, false)
             ->setCustomOption(self::OPTION_RENDER_EXPANDED, false);
-
-        return $field;
     }
 
     public function setEntryType($type): self

@@ -25,7 +25,7 @@ final class TranslationField implements FieldInterface
                     'required' => true,
                     'fields' => $fieldsConfig,
                     'constraints' => [
-                        new Assert\Valid()
+                        new Assert\Valid(),
                     ],
                 ]
             );
@@ -34,6 +34,7 @@ final class TranslationField implements FieldInterface
     public function setRequired(bool $isRequired): self
     {
         $this->setFormTypeOption('required', $isRequired);
+
         return $this;
     }
 }

@@ -1,4 +1,5 @@
 import Modal from 'bootstrap/js/src/modal';
+
 window.$ = window.jQuery = require('jquery');
 
 window.addEventListener('DOMContentLoaded', function (event) {

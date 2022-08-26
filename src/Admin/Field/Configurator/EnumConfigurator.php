@@ -9,7 +9,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+
 use function Symfony\Component\String\u;
+
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -17,11 +19,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class EnumConfigurator implements FieldConfiguratorInterface
 {
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -43,7 +46,6 @@ final class EnumConfigurator implements FieldConfiguratorInterface
         $field->setFormTypeOptionIfNotSet('choices', $choices);
         $field->setFormTypeOptionIfNotSet('expanded', $isExpanded);
         $field->setFormTypeOptionIfNotSet('multiple', $isMultiple);
-
 
         $field->setCustomOption(EnumField::OPTION_WIDGET, EnumField::WIDGET_NATIVE);
 
@@ -74,6 +76,7 @@ final class EnumConfigurator implements FieldConfiguratorInterface
                     : $choiceValue;
             }
         }
+
         $field->setFormattedValue(implode($isRenderedAsBadge ? '' : ', ', $selectedChoices));
     }
 
@@ -85,8 +88,8 @@ final class EnumConfigurator implements FieldConfiguratorInterface
 
         $choicesEnum = $enum::toArray();
         $choices = [];
-        foreach ($choicesEnum as $k => $v){
-            $choices[sprintf("easy.enum.%s.%s", $field->getProperty() , $v)] = $v;
+        foreach ($choicesEnum as $k => $v) {
+            $choices[sprintf('easy.enum.%s.%s', $field->getProperty(), $v)] = $v;
         }
 
         return $choices;

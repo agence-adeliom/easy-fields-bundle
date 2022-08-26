@@ -13,14 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * @var AdminUrlGenerator AdminUrlGenerator
-     */
-    protected $adminUrlGenerator;
-
-    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(protected AdminUrlGenerator $adminUrlGenerator)
     {
-        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     /**
@@ -45,32 +39,29 @@ class EntityTypeExtension extends AbstractTypeExtension
         ]);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $settableOptions = AssociationField::getSettableOptions();
         foreach ($settableOptions as $option) {
             $view->vars[$option] = $options[$option];
         }
 
-        if (isset($options[AssociationField::OPTION_ALLOW_ADD]) && $options[AssociationField::OPTION_ALLOW_ADD]) {
-            if (!empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
-                $ajaxEndpointUrl = $this->adminUrlGenerator
-                    ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
-                    ->setAction('new')
-                    ->generateUrl();
-                $view->vars['attr']['data-ea-ajax-new-endpoint-url'] = $ajaxEndpointUrl;
-            }
+        if (isset($options[AssociationField::OPTION_ALLOW_ADD]) && $options[AssociationField::OPTION_ALLOW_ADD] && !empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
+            $ajaxEndpointUrl = $this->adminUrlGenerator
+                ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
+                ->setAction('new')
+                ->generateUrl();
+            $view->vars['attr']['data-ea-ajax-new-endpoint-url'] = $ajaxEndpointUrl;
         }
-        //dump($options[AssociationField::OPTION_LIST_SELECTOR]); exit;
 
-        if (isset($options[AssociationField::OPTION_LIST_SELECTOR]) && $options[AssociationField::OPTION_LIST_SELECTOR]) {
-            if (!empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
-                $ajaxEndpointUrl = $this->adminUrlGenerator
-                    ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
-                    ->setAction('index')
-                    ->generateUrl();
-                $view->vars['attr']['data-ea-ajax-index-url'] = $ajaxEndpointUrl;
-            }
+        // dump($options[AssociationField::OPTION_LIST_SELECTOR]); exit;
+
+        if (isset($options[AssociationField::OPTION_LIST_SELECTOR]) && $options[AssociationField::OPTION_LIST_SELECTOR] && !empty($options[AssociationField::OPTION_CRUD_CONTROLLER])) {
+            $ajaxEndpointUrl = $this->adminUrlGenerator
+                ->setController($options[AssociationField::OPTION_CRUD_CONTROLLER])
+                ->setAction('index')
+                ->generateUrl();
+            $view->vars['attr']['data-ea-ajax-index-url'] = $ajaxEndpointUrl;
         }
 
         /*if(isset($view->vars['attr']["data-ea-widget"]) && $view->vars['attr']["data-ea-widget"] == "ea-autocomplete"){
@@ -80,8 +71,10 @@ class EntityTypeExtension extends AbstractTypeExtension
         }*/
     }
 
-
-    public static function getExtendedTypes(): iterable
+    /**
+     * @return class-string[]
+     */
+    public static function getExtendedTypes(): array
     {
         return [EntityType::class, CrudAutocompleteType::class];
     }

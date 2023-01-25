@@ -162,6 +162,7 @@ yield IconField::new('property', "label")
     ->setShowAllButtonLabel()  // Change label
     ->setSearchPlaceholder()  // Change label
     ->setNotResultMessage()  // Change label
+    ->setDeleteLabel()
     ;
 ```
 

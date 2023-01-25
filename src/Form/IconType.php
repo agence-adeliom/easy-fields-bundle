@@ -22,6 +22,7 @@ class IconType extends AbstractType
             'show_all_button' => 'Show All',
             'cancel_button' => 'Cancel',
             'no_result_found' => 'No results found.',
+            'delete_label' => 'Delete',
             'border_radius' => '5px',
             'fonts' => null,
         ]);
@@ -40,14 +41,8 @@ class IconType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        $view->vars['json_url'] = $options['json_url'];
-        $view->vars['select_button'] = $options['select_button'];
-        $view->vars['search_placeholder'] = $options['search_placeholder'];
-        $view->vars['show_all_button'] = $options['show_all_button'];
-        $view->vars['cancel_button'] = $options['cancel_button'];
-        $view->vars['no_result_found'] = $options['no_result_found'];
-        $view->vars['border_radius'] = $options['border_radius'];
-        $view->vars['fonts'] = null;
+        $view->vars = array_merge($view->vars, $options);
+
         if (!empty($options['fonts'])) {
             $view->vars['fonts'] = is_string($options['fonts']) ? [$options['fonts']] : $options['fonts'];
         }

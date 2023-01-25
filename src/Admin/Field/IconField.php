@@ -72,6 +72,13 @@ final class IconField implements FieldInterface
         return $this;
     }
 
+    public function setDeleteLabel(string $label): self
+    {
+        $this->setFormTypeOption('delete_label', $label);
+
+        return $this;
+    }
+
     /**
      * @param string|mixed[] $fonts
      */

@@ -72,6 +72,33 @@ var IconPicker = {
         }
         // IconPicker: Console Log Function off
 
+        var displayDeleteButton = function(element, show = true) {
+            element.style.display = show ? 'flex' : 'none';
+        };
+
+        var addDeleteEvent = function(ipButton) {
+            var deleteBtn = document.querySelector(ipButton.dataset.iconpickerDelete);
+            if(deleteBtn) {
+                var previewElement = document.querySelector(ipButton.dataset.iconpickerPreview);
+                var inputElement = document.querySelector(ipButton.dataset.iconpickerInput);
+
+                displayDeleteButton(deleteBtn, (inputElement.value || inputElement.innerHTML));
+                deleteBtn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    if(previewElement) {
+                        previewElement.className = '';
+                    }
+                    if(inputElement) {
+                        inputElement.value = '';
+                        inputElement.innerHTML = '';
+                    }
+                    displayDeleteButton(this, false);
+                    return false;
+                });
+            }
+        };
+
+
         // IconPicker: Check The Arguments For Proceed on
         if (arguments && arguments.length <= 2) {
 
@@ -84,10 +111,15 @@ var IconPicker = {
 
                     // IconPicker: Button Listeners -> Send XMLHttpRequest on
                     var ipButton = ipButtons[i];
+
+                    addDeleteEvent(ipButton);
+
                     ipButton.addEventListener('click', function () {
                         var jsonUrl = ipNewOptions.jsonUrl;
                         var inputElement = this.dataset.iconpickerInput;
                         var previewElement = this.dataset.iconpickerPreview;
+                        var deleteElement = this.dataset.iconpickerDelete;
+
                         var showAllButton = ipNewOptions.showAllButton;
                         if (!showAllButton || (showAllButton && showAllButton.length < 1)) {
                             showAllButton = ipDefaultOptions.showAllButton;
@@ -133,7 +165,7 @@ var IconPicker = {
                         }
                         // check the callback off
 
-                        getIconListXmlHttpRequest(jsonUrl, showAllButton, cancelButton, searchPlaceholder, borderRadius, inputElement, previewElement, theCallback);
+                        getIconListXmlHttpRequest(jsonUrl, showAllButton, cancelButton, searchPlaceholder, borderRadius, inputElement, previewElement, deleteElement, theCallback);
 
                     });
                     // IconPicker: Button Listeners -> Send XMLHttpRequest off
@@ -156,7 +188,7 @@ var IconPicker = {
 
 
         // IconPicker: Get Library from JSON and AppendTo Body on
-        var getIconListXmlHttpRequest = function (jsonUrl, buttonShowAll, buttonCancel, searchPlaceholder, borderRadius, inputElement, previewElement, theCallback) {
+        var getIconListXmlHttpRequest = function (jsonUrl, buttonShowAll, buttonCancel, searchPlaceholder, borderRadius, inputElement, previewElement, deleteElement, theCallback) {
 
             // if chrome browser
             if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
@@ -180,7 +212,7 @@ var IconPicker = {
                     if (this.readyState === 4) {
                         if (this.status === 200) { // success
                             var data = this.responseText;
-                            appendIconListToBody(data, buttonShowAll, buttonCancel, searchPlaceholder, borderRadius, inputElement, previewElement, theCallback);
+                            appendIconListToBody(data, buttonShowAll, buttonCancel, searchPlaceholder, borderRadius, inputElement, previewElement, deleteElement, theCallback);
                         } else {
                             ipConsoleError('XMLHttpRequest Failed.');
                         }
@@ -192,7 +224,7 @@ var IconPicker = {
 
 
         // IconPicker: Append Library to Body on
-        var appendIconListToBody = function (data, buttonShowAll, buttonCancel, searchPlaceholder, borderRadius, inputElement, previewElement, theCallback) {
+        var appendIconListToBody = function (data, buttonShowAll, buttonCancel, searchPlaceholder, borderRadius, inputElement, previewElement, deleteElement, theCallback) {
 
             // data
             var jsonData = JSON.parse(data);
@@ -376,6 +408,7 @@ var IconPicker = {
 
                 var inputElm = document.querySelectorAll(inputElement);
                 var previewElm = document.querySelectorAll(previewElement);
+                var deleteElm = document.querySelectorAll(deleteElement);
 
                 // define icons on
                 var eachIconElm;
@@ -414,6 +447,12 @@ var IconPicker = {
                             previewElm[i].className = iconClassName;
                         }
                         // each preview off
+
+                        // each delete on
+                        for (var i = 0; i < deleteElm.length; i++) {
+                            displayDeleteButton(deleteElm[i]);
+                        }
+                        // each delete off
 
                         // callback on
                         if (theCallback) {

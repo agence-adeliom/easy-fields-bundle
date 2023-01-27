@@ -3,6 +3,7 @@
 namespace Adeliom\EasyFieldsBundle\Admin\Field;
 
 use Adeliom\EasyFieldsBundle\Form\SortableCollectionType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -61,6 +62,7 @@ final class SortableCollectionField implements FieldInterface
             ->setFormType(SortableCollectionType::class)
             ->addCssClass('field-collection field-collection_sortable')
             ->addJsFiles('bundles/easyfields/form-type-collection-sortable.js')
+            ->addCssFiles(Asset::new('bundles/easyfields/form-type-collection-sortable.css')->onlyOnForms())
             ->setDefaultColumns('col-md-8 col-xxl-7')
             ->setCustomOption(self::OPTION_ALLOW_DRAG, true)
             ->setCustomOption(self::OPTION_ALLOW_ADD, true)

@@ -1,0 +1,9 @@
+.ea-dark-scheme .field-sortable_collection-item.bg-white {
+    background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity))!important;
+}
+.ea-dark-scheme .field-sortable_collection-item.bg-white.border {
+    border: 1px solid var(--border-secondary-color)!important;
+}
+
+
+

@@ -37,7 +37,7 @@ class AdminListener
                         if ($context->getEntity()->getPrimaryKeyValue()) {
                             $response->headers->set('X-CRUD-ENTITY-NAME', (string) $context->getEntity()->getInstance());
                         }
-                    } catch (\Exception) {
+                    } catch (\Exception|\Error) {
                     }
                 } else {
                     $response->headers->set('X-CRUD-ENTITY-NAME', $context->getEntity()->toString());

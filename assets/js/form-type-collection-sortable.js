@@ -103,14 +103,14 @@ const EaSortableCollectionProperty = {
             return;
         }
 
-        if(collection.querySelector(".ea-form-collection-items .accordion > .form-widget-compound > div")){
+        if(document.getElementById(collection.dataset.formTypeId)){
             if(collection.sortable){
                 collection.sortable.destroy();
                 collection.sortable = null;
             }
 
-            collection.sortable = Sortable.create(collection.querySelector(".ea-form-collection-items .accordion > .form-widget-compound > div"),{
-                handle: '.field-sortable_collection-drag-button',
+            collection.sortable = Sortable.create(document.getElementById(collection.dataset.formTypeId),{
+                handle: `[drag-handler="${collection.dataset.formTypeId}"]`,
                 direction: 'vertical',
                 onEnd: function (evt) {
                     EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
@@ -123,25 +123,27 @@ const EaSortableCollectionProperty = {
             return;
         }
 
-        const collectionItems = collection.querySelectorAll('.field-sortable_collection-item');
+        const collectionItems = collection.querySelectorAll(`.field-sortable_collection-item[data-form-type-parent-id="${collection.dataset.formTypeParentId}"]`);
+
+        const fullName = collection.dataset.eaCollectionFieldFullName;
+
         collectionItems.forEach((item, key) => {
             item.querySelectorAll('[name]').forEach((input) => {
                 if (!input.name){
                     return;
                 }
-                let index = input.name.match(/\[\d+\]/g);
+                const name = input.name.replace(fullName, "");
+                let index = /^\[\d+\]/g.exec(name);
                 if (index){
-                    var i = 0;
-                    input.name = input.name.replace(/\[\d+\]/g,function (match, pos, original) {
-                        i++;
-                        return (i == collection.dataset.level) ? '['+key+']' : match;
-                    })
+                    var i = key + 1;
+                    const child = name.replace(index, "");
+                    console.log(input.name, `${fullName}[${i}]${child}`)
+                    input.name = `${fullName}[${i}]${child}`
                 }
             })
         })
 
         collectionItems.forEach((item) => item.classList.remove('field-sortable_collection-item-first', 'field-sortable_collection-item-last'));
-
 
         const firstElement = collectionItems[0];
         if (undefined === firstElement) {

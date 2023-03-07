@@ -13,6 +13,7 @@
         'data-form-type-id': id,
         'data-form-type-parent-id': form.parent is defined ? form.parent.vars.id : '',
         'data-form-type-parent-name': form.parent is defined ? form.parent.vars.name : '',
+        'data-ea-collection-field-full-name': form.vars.full_name
     }) %}
 
     {{ block('form_row') }}
@@ -77,14 +78,14 @@
     {% endset %}
 
     {% set drag_item_button %}
-        <button type="button" class="btn btn-link btn-link-secondary field-sortable_collection-drag-button" style="cursor:move;"
+        <button type="button" class="btn btn-link btn-link-secondary field-sortable_collection-drag-button" drag-handler="{{ form.parent.vars.id|default("") }}" style="cursor:move;"
                 title="{{ 'action.drag_item'|trans({}, 'EasyAdminBundle') }}">
             <i class="fas fa-arrows-alt-v"></i>
         </button>
     {% endset %}
 
 
-    <div class="field-sortable_collection-item {{ is_complex ? 'field-sortable_collection-item-complex' }} bg-white border rounded mb-1 {{ error ? "border-danger"}} " >
+    <div class="field-sortable_collection-item {{ is_complex ? 'field-sortable_collection-item-complex' }} bg-white border rounded mb-1 {{ error ? "border-danger"}} " data-form-type-parent-id="{{ form_parent(form).parent.vars.id|default("") }}" >
         {% if is_array_field|default(false) %}
             {{ form_widget(form) }}
             {% if allows_deleting_items %}

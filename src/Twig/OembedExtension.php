@@ -23,8 +23,8 @@ class OembedExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('oembed_html', \Closure::fromCallable(fn ($url) => $this->getCode($url)), ['is_safe' => ['html']]),
-            new TwigFilter('oembed_size', \Closure::fromCallable(fn ($url): ?array => $this->getDimensions($url))),
+            new TwigFilter('oembed_html', \Closure::fromCallable(fn (string $url) => $this->getCode($url)), ['is_safe' => ['html']]),
+            new TwigFilter('oembed_size', \Closure::fromCallable(fn (string $url): ?array => $this->getDimensions($url))),
         ];
     }
 
@@ -35,7 +35,7 @@ class OembedExtension extends AbstractExtension
         ];
     }
 
-    public function getOembed($url)
+    public function getOembed(string $url)
     {
         if (!$this->embed || $url != $this->url) {
             try {
@@ -49,7 +49,7 @@ class OembedExtension extends AbstractExtension
         return $this->embed;
     }
 
-    public function getCode($url)
+    public function getCode(string $url)
     {
         if ($this->getOembed($url) && $code = $this->getOembed($url)->code) {
             return $code->html;

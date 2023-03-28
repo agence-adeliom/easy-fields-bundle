@@ -3,8 +3,11 @@
     {% set url = field.value %}
 {% endif %}
 
-{% set code = url|oembed_html %}
-{% if code %}
+{% if url is defined and url is not null %}
+    {% set code = url|oembed_html %}
+{% endif %}
+
+{% if code|default() %}
     {% set dimensions = url|oembed_size %}
     <div class="oembed-holder">
         <div class="oembed-responsive" style="padding-bottom: {{ dimensions.ratio ? dimensions.ratio ~ "%" : "0" }}; min-width: {{ dimensions.width ? dimensions.width ~ "px" : "auto" }}">

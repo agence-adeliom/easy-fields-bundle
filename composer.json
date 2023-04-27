@@ -2,11 +2,7 @@
     "name": "agence-adeliom/easy-fields-bundle",
     "type": "symfony-bundle",
     "description": "A Symfony bundle for EasyAdmin that provide some fields",
-    "keywords": [
-        "symfony",
-        "easyadmin",
-        "fields"
-    ],
+    "keywords": ["symfony", "easyadmin", "fields"],
     "homepage": "https://github.com/agence-adeliom/easy-fields-bundle",
     "license": "MIT",
     "authors": [

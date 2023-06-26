@@ -294,7 +294,9 @@ var IconPicker = {
                 clearTimeout(ltAnimate);
             }, 600);
             var ltRemove = setTimeout(function () {
-                loadingElement.parentNode.removeChild(loadingElement);
+                if(loadingElement && loadingElement.parentNode){
+                    loadingElement.parentNode.removeChild(loadingElement);
+                }
                 clearTimeout(ltRemove);
             }, 900);
             // remove loading indicator off
@@ -311,7 +313,9 @@ var IconPicker = {
             var removeIpElement = function (delay) {
                 ipElement.classList.remove('animate');
                 setTimeout(function () {
-                    docBody.removeChild(ipElement);
+                    if(ipElement){
+                        ipElement.remove();
+                    }
                 }, delay);
             }
             // close and remove all off

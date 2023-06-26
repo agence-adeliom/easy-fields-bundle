@@ -52,6 +52,9 @@ var extendIconPicker = function () {
 // IconPicker: Main on
 var IconPicker = {
 
+    // prevent multiple instantiation on the same button
+    initializedIds: [],
+
     // init
     Init: function (ipUserOptions) {
         ipNewOptions = extendIconPicker(true, ipDefaultOptions, ipUserOptions);
@@ -59,6 +62,11 @@ var IconPicker = {
 
     // run
     Run: function (theButton, theCallback) {
+        if (this.initializedIds.indexOf(theButton) !== -1) {
+            return;
+        }
+
+        this.initializedIds.push(theButton);
 
         // IconPicker: Console Error Function on
         var ipConsoleError = function (errorMessage) {

@@ -135,7 +135,7 @@ const EaSortableCollectionProperty = {
                 const name = input.name.replace(fullName, "");
                 let index = /^\[\d+\]/g.exec(name);
                 if (index){
-                    var i = key + 1;
+                    let i = key;
                     const child = name.replace(index, "");
                     console.log(input.name, `${fullName}[${i}]${child}`)
                     input.name = `${fullName}[${i}]${child}`

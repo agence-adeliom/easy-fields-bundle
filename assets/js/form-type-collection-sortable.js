@@ -127,6 +127,8 @@ const EaSortableCollectionProperty = {
 
         const fullName = collection.dataset.eaCollectionFieldFullName;
 
+        let hasToIncrement = false;
+
         collectionItems.forEach((item, key) => {
             item.querySelectorAll('[name]').forEach((input) => {
                 if (!input.name){
@@ -135,15 +137,11 @@ const EaSortableCollectionProperty = {
                 const name = input.name.replace(fullName, "");
                 let index = /^\[\d+\]/g.exec(name);
                 if (index){
-                    const indexKey = index[0]?.replaceAll('[', '').replaceAll(']', '');
-
-                    if(indexKey){
-                        key = indexKey;
-                    } else {
-                        key += 1;
+                    if(key === 0){
+                        hasToIncrement = true;
                     }
 
-                    let i = key;
+                    let i = hasToIncrement ? key + 1 : key;
                     const child = name.replace(index, "");
                     console.log(input.name, `${fullName}[${i}]${child}`)
                     input.name = `${fullName}[${i}]${child}`

@@ -135,6 +135,14 @@ const EaSortableCollectionProperty = {
                 const name = input.name.replace(fullName, "");
                 let index = /^\[\d+\]/g.exec(name);
                 if (index){
+                    const indexKey = index[0]?.replaceAll('[', '').replaceAll(']', '');
+
+                    if(indexKey){
+                        key = indexKey;
+                    } else {
+                        key += 1;
+                    }
+
                     let i = key;
                     const child = name.replace(index, "");
                     console.log(input.name, `${fullName}[${i}]${child}`)

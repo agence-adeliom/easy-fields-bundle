@@ -179,6 +179,16 @@ yield PositionSortableField::new('property', "label");
 
 ### OembedField
 
+To use this field, you need to add the bundle specific routes:  
+
+```yaml
+# config/routes/easy_fields.yaml
+
+easy_fields:
+  resource: '@EasyFieldsBundle/Resources/config/routes.xml'
+  prefix: /
+```
+
 #### Usage
 ```php
 use Adeliom\EasyFieldsBundle\Admin\Field\OembedField;

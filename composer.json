@@ -20,8 +20,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0.2",
-        "ext-json": "*",
+        "php": ">=8.2",
         "symfony/config": "^6.4 || ^7.0",
         "symfony/dependency-injection": "^6.4 || ^7.0",
         "symfony/event-dispatcher": "^6.4 || ^7.0",
@@ -29,10 +28,10 @@
         "symfony/http-kernel": "^6.4 || ^7.0",
         "symfony/options-resolver": "^6.4 || ^7.0",
         "easycorp/easyadmin-bundle": "^3.4 || ^v4.0",
-        "stof/doctrine-extensions-bundle": "^1.6",
-        "symfony/psr-http-message-bridge": "^2.0",
+        "stof/doctrine-extensions-bundle": "^1.13",
+        "symfony/psr-http-message-bridge": "^7.2",
         "nyholm/psr7": "^1.4",
-        "embed/embed": "^4.2"
+        "embed/embed": "^4.4"
     },
     "autoload": {
         "psr-4": {

@@ -54,17 +54,6 @@ use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
 yield AssociationField::new('property', "label");
 ```
 
-### EnumField
-
-#### Usage
-
-```php
-use Adeliom\EasyFieldsBundle\Admin\Field\EnumField;
-...
-yield EnumField::new('property', "label")
-    ->setEnum(YourEnumClass::class);
-```
-
 ### FormTypeField
 
 This field is a custom integration that allow you to bind any raw form type to your admin.

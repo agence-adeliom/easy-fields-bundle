@@ -12,12 +12,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-final class PositionSortableConfigurator implements FieldConfiguratorInterface
+final readonly class PositionSortableConfigurator implements FieldConfiguratorInterface
 {
     public function __construct(
-        /**
-         * @readonly
-         */
         private AdminUrlGenerator $adminUrlGenerator
     ) {
     }

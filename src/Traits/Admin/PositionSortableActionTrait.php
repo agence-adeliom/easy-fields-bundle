@@ -12,23 +12,23 @@ trait PositionSortableActionTrait
     public function sortPositionAction(AdminContext $context): Response
     {
         $requestContent = json_decode($context->getRequest()->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        [$leftPrimaryKeyValue, $leftParentProperty] = $requestContent['l'] ? explode(':', $requestContent['l']) : [null, null];
-        [$rightPrimaryKeyValue, $rightParentProperty] = $requestContent['r'] ? explode(':', $requestContent['r']) : [null, null];
-        [$primaryKeyValue, $parentProperty] = $requestContent['c'] ? explode(':', $requestContent['c']) : [null, null];
+        [$leftPrimaryKeyValue, $leftParentProperty] = $requestContent['l'] ? explode(':', (string) $requestContent['l']) : [null, null];
+        [$rightPrimaryKeyValue, $rightParentProperty] = $requestContent['r'] ? explode(':', (string) $requestContent['r']) : [null, null];
+        [$primaryKeyValue, $parentProperty] = $requestContent['c'] ? explode(':', (string) $requestContent['c']) : [null, null];
         $leftEntity = null;
         $entity = null;
         $rightEntity = null;
         $entity = null;
 
-        if (!empty($leftPrimaryKeyValue) && !empty($leftParentProperty)) {
+        if ($leftPrimaryKeyValue !== null && $leftPrimaryKeyValue !== '' && $leftPrimaryKeyValue !== '0' && ($leftParentProperty !== null && $leftParentProperty !== '' && $leftParentProperty !== '0')) {
             $leftEntity = $this->managerRegistry->getRepository($context->getEntity()->getFqcn())->find($leftPrimaryKeyValue);
         }
 
-        if (!empty($rightPrimaryKeyValue) && !empty($rightParentProperty)) {
+        if ($rightPrimaryKeyValue !== null && $rightPrimaryKeyValue !== '' && $rightPrimaryKeyValue !== '0' && ($rightParentProperty !== null && $rightParentProperty !== '' && $rightParentProperty !== '0')) {
             $rightEntity = $this->managerRegistry->getRepository($context->getEntity()->getFqcn())->find($rightPrimaryKeyValue);
         }
 
-        if (!empty($primaryKeyValue) && !empty($parentProperty)) {
+        if ($primaryKeyValue !== null && $primaryKeyValue !== '' && $primaryKeyValue !== '0' && ($parentProperty !== null && $parentProperty !== '' && $parentProperty !== '0')) {
             $entity = $this->managerRegistry->getRepository($context->getEntity()->getFqcn())->find($primaryKeyValue);
         }
 
@@ -36,7 +36,7 @@ trait PositionSortableActionTrait
 
         if (!empty($leftEntity)) {
             try {
-                if ($leftEntity->{'get'.ucfirst($parentProperty)}() !== $entity->{'get'.ucfirst($parentProperty)}()) {
+                if ($leftEntity->{'get'.ucfirst((string) $parentProperty)}() !== $entity->{'get'.ucfirst((string) $parentProperty)}()) {
                     $this->managerRegistry->getRepository($context->getEntity()->getFqcn())->persistAsFirstChildOf($entity, $leftEntity);
                 } else {
                     $this->managerRegistry->getRepository($context->getEntity()->getFqcn())->persistAsNextSiblingOf($entity, $leftEntity);

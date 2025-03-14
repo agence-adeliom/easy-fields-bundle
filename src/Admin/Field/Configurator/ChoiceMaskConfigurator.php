@@ -17,12 +17,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
+final readonly class ChoiceMaskConfigurator implements FieldConfiguratorInterface
 {
     public function __construct(
-        /**
-         * @readonly
-         */
         private TranslatorInterface $translator
     ) {
     }
@@ -38,11 +35,11 @@ final class ChoiceMaskConfigurator implements FieldConfiguratorInterface
 
         $choices = $this->getChoices($field->getCustomOption(ChoiceMaskField::OPTION_CHOICES), $entityDto, $field);
         $map = $this->getMap($field->getCustomOption(ChoiceMaskField::OPTION_MAP), $entityDto, $field);
-        if (empty($choices)) {
+        if ($choices === []) {
             throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its possible choices using the setChoices() method.', $field->getProperty()));
         }
 
-        if (empty($map)) {
+        if ($map === []) {
             throw new \InvalidArgumentException(sprintf('The "%s" choice field must define its fields map using the setMap() method.', $field->getProperty()));
         }
 

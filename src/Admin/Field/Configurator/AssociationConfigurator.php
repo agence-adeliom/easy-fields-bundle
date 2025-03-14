@@ -18,20 +18,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudAutocompleteType;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class AssociationConfigurator implements FieldConfiguratorInterface
+final readonly class AssociationConfigurator implements FieldConfiguratorInterface
 {
     public function __construct(
-        /**
-         * @readonly
-         */
         private EntityFactory $entityFactory,
-        /**
-         * @readonly
-         */
         private AdminUrlGenerator $adminUrlGenerator,
-        /**
-         * @readonly
-         */
         private TranslatorInterface $translator
     ) {
     }

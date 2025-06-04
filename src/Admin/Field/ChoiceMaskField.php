@@ -55,10 +55,7 @@ final class ChoiceMaskField implements FieldInterface
      */
     public const WIDGET_NATIVE = 'native';
 
-    /**
-     * @param string|false|null $label
-     */
-    public static function new(string $propertyName, $label = null): self
+    public static function new(string $propertyName, ?string $label = null): self
     {
         return (new self())
             ->setProperty($propertyName)

@@ -127,24 +127,22 @@ const EaSortableCollectionProperty = {
 
         const fullName = collection.dataset.eaCollectionFieldFullName;
 
-        let hasToIncrement = false;
-
         collectionItems.forEach((item, key) => {
             item.querySelectorAll('[name]').forEach((input) => {
                 if (!input.name){
                     return;
                 }
+
+                // premiere_partie
                 const name = input.name.replace(fullName, "");
+                // recherche [0]
                 let index = /^\[\d+\]/g.exec(name);
                 if (index){
-                    if(key === 0){
-                        hasToIncrement = true;
-                    }
-
-                    let i = hasToIncrement ? key + 1 : key;
+                    // seconde_partie
                     const child = name.replace(index, "");
-                    console.log(input.name, `${fullName}[${i}]${child}`)
-                    input.name = `${fullName}[${i}]${child}`
+                    // premiere_partie[0]seconde_partie
+                    console.log(input.name, `${fullName}[${key}]${child}`)
+                    input.name = `${fullName}[${key}]${child}`
                 }
             })
         })

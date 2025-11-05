@@ -207,5 +207,6 @@ yield OembedField::new('property', "label");
 
 - [@arnaud-ritti](https://github.com/arnaud-ritti)
 - [@JeromeEngelnAdeliom](https://github.com/JeromeEngelnAdeliom)
+- [@jeandaviddaviet](https://github.com/JeanDavidDaviet)
 
   

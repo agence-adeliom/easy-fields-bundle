@@ -17,6 +17,10 @@
         {
             "name": "Jerome ENGELN",
             "homepage": "https://github.com/JeromeEngelnAdeliom"
+        },
+        {
+            "name": "Jean-David Daviet",
+            "homepage": "https://github.com/JeanDavidDaviet"
         }
     ],
     "require": {

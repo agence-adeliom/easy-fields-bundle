@@ -123,7 +123,7 @@ const EaSortableCollectionProperty = {
             return;
         }
 
-        const collectionItems = collection.querySelectorAll(`.field-sortable_collection-item[data-form-type-parent-id="${collection.dataset.formTypeParentId}"]`);
+        const collectionItems = collection.querySelectorAll(`.field-sortable_collection-item[data-form-type-parent-id^="${collection.dataset.formTypeParentId}"]`);
 
         const fullName = collection.dataset.eaCollectionFieldFullName;
 

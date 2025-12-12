@@ -71,18 +71,19 @@ const EaSortableCollectionProperty = {
             const nameRegexp = new RegExp(formTypeNamePlaceholder, 'g');
 
             let newItemHtml = collection.dataset.prototype
-              .replace(labelRegexp, ++numItems)
+              .replace(labelRegexp, numItems)
               .replace(nameRegexp, numItems);
+            ++numItems;
+            collection.dataset.numItems = numItems.toString();
 
-            collection.dataset.numItems = numItems;
             const newItemInsertionSelector = isArrayCollection ? '.ea-form-collection-items' : '.ea-form-collection-items .accordion > .form-widget-compound';
             const collectionItemsWrapper = collection.querySelector(newItemInsertionSelector);
 
             EaSortableCollectionProperty.setInnerHTML(collectionItemsWrapper, newItemHtml).then(() => {
                 // for complex collections of items, show the newly added item as not collapsed
                 if (!isArrayCollection) {
-                    EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
-                    EaSortableCollectionProperty.updateCollectionSortable(collection);
+                    // EaSortableCollectionProperty.updateCollectionItemCssClasses(collection);
+                    // EaSortableCollectionProperty.updateCollectionSortable(collection);
 
                     const collectionItems = collectionItemsWrapper.querySelectorAll('.field-sortable_collection-item');
                     const lastElement = collectionItems[collectionItems.length - 1];
@@ -212,5 +213,4 @@ const EaSortableCollectionProperty = {
             });
         });
     }
-
 };

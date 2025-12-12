@@ -2,6 +2,7 @@
 
 namespace Adeliom\EasyFieldsBundle\Form;
 
+use Adeliom\EasyFieldsBundle\EventSubscriber\ReindexSortableCollectionSubscriber;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,6 +42,7 @@ class SortableCollectionType extends CollectionType
         );
 
         $builder->addEventSubscriber($resizeListener);
+        $builder->addEventSubscriber(new ReindexSortableCollectionSubscriber());
     }
 
     /**

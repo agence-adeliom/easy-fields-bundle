@@ -4,7 +4,7 @@ namespace Adeliom\EasyFieldsBundle\Form\Extension;
 
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudAutocompleteType;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityTypeExtension extends AbstractTypeExtension
 {
-    public function __construct(protected AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(protected AdminUrlGeneratorInterface $adminUrlGenerator)
     {
     }
 

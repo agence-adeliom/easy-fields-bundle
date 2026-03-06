@@ -4,20 +4,14 @@ namespace Adeliom\EasyFieldsBundle\Tests\Form\Extension;
 
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
 use Adeliom\EasyFieldsBundle\Form\Extension\EntityTypeExtension;
-use Psr\Cache\CacheItemPoolInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudAutocompleteType;
-use EasyCorp\Bundle\EasyAdminBundle\Contracts\Router\AdminRouteGeneratorInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
-use EasyCorp\Bundle\EasyAdminBundle\Registry\DashboardControllerRegistry;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[CoversClass(\Adeliom\EasyFieldsBundle\Form\Extension\EntityTypeExtension::class)]
 final class EntityTypeExtensionTest extends TestCase
@@ -29,65 +23,25 @@ final class EntityTypeExtensionTest extends TestCase
 
     public function testBuildViewAddsAjaxAttributesWhenConfigured(): void
     {
-        $cacheDir = sys_get_temp_dir().'/easy-fields-tests/'.bin2hex(random_bytes(6));
-        mkdir($cacheDir.'/easyadmin', 0777, true);
-        file_put_contents(
-            $cacheDir.'/easyadmin/routes-dashboard.php',
-            "<?php\n\nreturn ['admin' => 'App\\\\Controller\\\\Admin\\\\DashboardController::index'];\n"
-        );
+        $adminUrlGenerator = $this->createMock(AdminUrlGeneratorInterface::class);
+        $adminUrlGenerator->method('setController')->willReturnSelf();
 
-        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $cache = $this->createMock(CacheItemPoolInterface::class);
-        $generatedUrls = [];
-        $urlGenerator
-            ->expects(self::exactly(2))
-            ->method('generate')
-            ->willReturnCallback(static function (string $route, array $parameters, int $referenceType) use (&$generatedUrls): string {
-                $generatedUrls[] = [$route, $parameters, $referenceType];
+        $calls = [];
+        $adminUrlGenerator->method('setAction')
+            ->willReturnCallback(function (string $action) use ($adminUrlGenerator, &$calls) {
+                $calls[] = $action;
 
-                return match ($route) {
-                    'admin_item_new' => '/admin/new-item',
-                    'admin_item_index' => '/admin/list-items',
-                    default => throw new \LogicException(sprintf('Unexpected route "%s".', $route)),
-                };
+                return $adminUrlGenerator;
             });
 
-        $adminUrlGenerator = new AdminUrlGenerator(
-            new AdminContextProvider(new RequestStack()),
-            $urlGenerator,
-            new DashboardControllerRegistry(
-                $cacheDir,
-                ['App\\Controller\\Admin\\DashboardController' => 'dashboard_context'],
-                ['dashboard_context' => 'App\\Controller\\Admin\\DashboardController']
-            ),
-            new class() implements AdminRouteGeneratorInterface {
-                public function generateAll(): \Symfony\Component\Routing\RouteCollection
-                {
-                    return new \Symfony\Component\Routing\RouteCollection();
-                }
-
-                public function findRouteName(string $dashboardFqcn, string $crudControllerFqcn, string $actionName): ?string
-                {
-                    return match ($actionName) {
-                        'new' => 'admin_item_new',
-                        'index' => 'admin_item_index',
-                        default => null,
-                    };
-                }
-
-                public function usesPrettyUrls(): bool
-                {
-                    return true;
-                }
-            },
-            $cache
-        );
-
-        register_shutdown_function(static function () use ($cacheDir): void {
-            @unlink($cacheDir.'/easyadmin/routes-dashboard.php');
-            @rmdir($cacheDir.'/easyadmin');
-            @rmdir($cacheDir);
-        });
+        $adminUrlGenerator->method('generateUrl')
+            ->willReturnCallback(function () use (&$calls): string {
+                return match (end($calls)) {
+                    'new' => '/admin/new-item',
+                    'index' => '/admin/list-items',
+                    default => throw new \LogicException('Unexpected action.'),
+                };
+            });
 
         $extension = new EntityTypeExtension($adminUrlGenerator);
         $resolver = new OptionsResolver();
@@ -107,9 +61,5 @@ final class EntityTypeExtensionTest extends TestCase
         self::assertSame('/admin/list-items', $view->vars['attr']['data-ea-ajax-index-url']);
         self::assertTrue($view->vars[AssociationField::OPTION_ALLOW_ADD]);
         self::assertTrue($view->vars[AssociationField::OPTION_LIST_SELECTOR]);
-        self::assertSame([
-            ['admin_item_new', [], UrlGeneratorInterface::ABSOLUTE_URL],
-            ['admin_item_index', [], UrlGeneratorInterface::ABSOLUTE_URL],
-        ], $generatedUrls);
     }
 }

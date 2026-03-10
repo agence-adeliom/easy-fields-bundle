@@ -3,6 +3,9 @@ services:
         autowire: true
         autoconfigure: true
 
+    EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface:
+        alias: EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator
+
     Adeliom\EasyFieldsBundle\Form\Extension\:
         resource: '../../Form/Extension/'
 

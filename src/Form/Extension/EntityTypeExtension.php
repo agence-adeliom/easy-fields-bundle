@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\EasyFieldsBundle\Form\Extension;
 
 use Adeliom\EasyFieldsBundle\Admin\Field\AssociationField;
@@ -13,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityTypeExtension extends AbstractTypeExtension
 {
-    public function __construct(protected AdminUrlGeneratorInterface $adminUrlGenerator)
+    public function __construct(private readonly AdminUrlGeneratorInterface $adminUrlGenerator)
     {
     }
 
